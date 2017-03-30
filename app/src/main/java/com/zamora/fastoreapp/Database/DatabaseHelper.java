@@ -31,9 +31,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         // Crear la base de datos de la app
         db.execSQL(DatabaseContract.SQL_CREATE_USUARIO);
         db.execSQL(DatabaseContract.SQL_CREATE_LISTA_COMPRAS);
-        db.execSQL(DatabaseContract.SQL_CREATE_PRODUCTO);
-        db.execSQL(DatabaseContract.SQL_CREATE_DETALLE_LISTA);
-        db.execSQL(DatabaseContract.SQL_CREATE_LISTA_COMPARTIDAS);
+        //db.execSQL(DatabaseContract.SQL_CREATE_PRODUCTO);
+       // db.execSQL(DatabaseContract.SQL_CREATE_DETALLE_LISTA);
+        //db.execSQL(DatabaseContract.SQL_CREATE_LISTA_COMPARTIDAS);
     }
 
     @Override
@@ -41,9 +41,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         // Administracion de actualizaciones
         db.execSQL(DatabaseContract.SQL_DELETE_USUARIO);
         db.execSQL(DatabaseContract.SQL_DELETE_LISTA_COMPRAS);
-        db.execSQL(DatabaseContract.SQL_DELETE_PRODUCTO);
-        db.execSQL(DatabaseContract.SQL_DELETE_DETALLE_LISTA);
-        db.execSQL(DatabaseContract.SQL_DELETE_LISTA_COMPARTIDAS);
+       // db.execSQL(DatabaseContract.SQL_DELETE_PRODUCTO);
+        //db.execSQL(DatabaseContract.SQL_DELETE_DETALLE_LISTA);
+       // db.execSQL(DatabaseContract.SQL_DELETE_LISTA_COMPARTIDAS);
         onCreate(db);
     }
 }

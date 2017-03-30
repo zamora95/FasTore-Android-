@@ -53,8 +53,8 @@ public class ListaCompras {
     }
 
     public void setFechaCompra(String fechaCompra) {
-        Date fecha = SimpleDateFormat.parse(fechaCompra);
-        this.fechaCompra = fecha;
+       // Date fecha = SimpleDateFormat.pase(fechaCompra);
+        //this.fechaCompra = fecha;
     }
 
     public Double getMontoTotal() {
