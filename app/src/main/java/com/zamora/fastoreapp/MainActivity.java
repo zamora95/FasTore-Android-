@@ -92,10 +92,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
-            String imgUrl = account.getPhotoUrl().toString();
+            try {
+                String imgUrl = account.getPhotoUrl().toString();
+                Glide.with(this).load(imgUrl).into(ProfPic);
+            } catch (Exception e) {}
+
             Name.setText(name);
             Email.setText(email);
-            Glide.with(this).load(imgUrl).into(ProfPic);
+            // Glide.with(this).load(imgUrl).into(ProfPic);
             updateUI(true);
         }
         else{

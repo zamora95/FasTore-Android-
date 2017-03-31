@@ -8,10 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.zamora.fastoreapp.Database.DatabaseContract;
 import com.zamora.fastoreapp.Database.DatabaseHelper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static android.R.attr.id;
+import java.util.ArrayList;
 
 /**
  * Created by Zamora on 29/03/2017.
@@ -19,14 +16,18 @@ import static android.R.attr.id;
 
 public class ListaCompras {
     private String id;
+    private String nombre;
     private String idUsuario;
-    private Date fechaCompra;
+    private String fechaCompra;
     private Double montoTotal;
+    private ArrayList<Producto> detalle;
+    private ArrayList<Usuario> usuariosPermitidos;
 
     public ListaCompras(){}
 
-    public ListaCompras(String id, String idUsuario, Date fechaCompra, Double montoTotal) {
+    public ListaCompras(String id, String nombre,String idUsuario, String fechaCompra, Double montoTotal) {
         this.id = id;
+        this.nombre = nombre;
         this.idUsuario = idUsuario;
         this.fechaCompra = fechaCompra;
         this.montoTotal = montoTotal;
@@ -48,13 +49,12 @@ public class ListaCompras {
         this.idUsuario = idUsuario;
     }
 
-    public Date getFechaCompra() {
+    public String getFechaCompra() {
         return fechaCompra;
     }
 
     public void setFechaCompra(String fechaCompra) {
-       // Date fecha = SimpleDateFormat.pase(fechaCompra);
-        //this.fechaCompra = fecha;
+       this.fechaCompra = fechaCompra;
     }
 
     public Double getMontoTotal() {
@@ -63,6 +63,30 @@ public class ListaCompras {
 
     public void setMontoTotal(Double montoTotal) {
         this.montoTotal = montoTotal;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public ArrayList<Producto> getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(ArrayList<Producto> detalle) {
+        this.detalle = detalle;
+    }
+
+    public ArrayList<Usuario> getUsuariosPermitidos() {
+        return usuariosPermitidos;
+    }
+
+    public void setUsuariosPermitidos(ArrayList<Usuario> usuariosPermitidos) {
+        this.usuariosPermitidos = usuariosPermitidos;
     }
 
     /**
@@ -75,8 +99,9 @@ public class ListaCompras {
         // Crear un mapa de valores donde las columnas son las llaves
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.DataBaseEntry._ID, getId());
+        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE, getNombre());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO, getIdUsuario());
-        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA, getFechaCompra().toString());
+        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA, getFechaCompra());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL, getMontoTotal());
 
         // Insertar la nueva fila
@@ -87,7 +112,7 @@ public class ListaCompras {
     /**
      * Leer una lista de compras desde la base de datos
      */
-    public void leer (Context context, String identificacion){
+    public ArrayList<ListaCompras> leer (Context context, /*String identificacion*/ String usuario){
         DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
 
         // Obtiene la base de datos en modo lectura
@@ -96,14 +121,16 @@ public class ListaCompras {
         // Define cuales columnas quiere solicitar // en este caso todas las de la clase
         String[] projection = {
                 DatabaseContract.DataBaseEntry._ID,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE,
                 DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO,
                 DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA,
                 DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL,
         };
 
         // Filtro para el WHERE
-        String selection = DatabaseContract.DataBaseEntry._ID + " = ?";
-        String[] selectionArgs = {identificacion};
+        //String selection = DatabaseContract.DataBaseEntry._ID + " = ?";
+        String selection = DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO + " = ?";
+        String[] selectionArgs = {usuario/*identificacion*/};
 
         // Resultados en el cursor
         Cursor cursor = db.query(
@@ -116,18 +143,24 @@ public class ListaCompras {
                 null // orden
         );
 
-        // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
+        ArrayList<ListaCompras> misListas = new ArrayList<>();
         System.out.println(String.valueOf(cursor.getCount()));
-        if(cursor.moveToFirst() && cursor.getCount() > 0) {
-            setId(cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry._ID)));
-            setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO)));
-            setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA)));
-            setMontoTotal(cursor.getDouble(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL)));
+        if(cursor.moveToFirst()) {
+            do {
+                setId(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry._ID)));
+                setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
+                setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO)));
+                setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA)));
+                setMontoTotal(cursor.getDouble(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL)));
+                misListas.add(this);
+            } while (cursor.moveToNext());
         }
+        return misListas;
     }
 
 
@@ -139,8 +172,9 @@ public class ListaCompras {
         SQLiteDatabase db = DatabaseHelper.getReadableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE, getNombre());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO, getIdUsuario());
-        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA, getFechaCompra().toString());
+        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA, getFechaCompra());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL, getMontoTotal());
 
         // Criterio de actualizacion
