@@ -61,7 +61,7 @@ public class DatabaseContract {
 
     public static final String SQL_CREATE_USUARIO =
             "CREATE TABLE " + DataBaseEntry.TABLE_NAME_USUARIO + " (" +
-                    DataBaseEntry._ID + TEXT_TYPE + "PRIMARY KEY," +
+                    DataBaseEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
                     DataBaseEntry.COLUMN_NAME_APELLIDO + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_NOMBRE + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_EMAIL + TEXT_TYPE + COMMA_SEP +
@@ -74,12 +74,12 @@ public class DatabaseContract {
 
     public static final String SQL_CREATE_LISTA_COMPRAS =
             "CREATE TABLE " + DataBaseEntry.TABLE_NAME_LISTA_COMPRA + " (" +
-                    DataBaseEntry._ID + TEXT_TYPE + "PRIMARY KEY," +
+                    DataBaseEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
                     DataBaseEntry.COLUMN_NAME_NOMBRE + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_ID_USUARIO + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_FECHA_COMPRA + TEXT_TYPE + COMMA_SEP +
-                    DataBaseEntry.COLUMN_NAME_MONTO_TOTAL + REAL_TYPE +
-                    "FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_USUARIO +
+                    DataBaseEntry.COLUMN_NAME_MONTO_TOTAL + REAL_TYPE + COMMA_SEP +
+                    " FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_USUARIO +
                     ") REFERENCES " + DataBaseEntry.TABLE_NAME_USUARIO + "(" + DataBaseEntry._ID + ") )";
 
     public static final String SQL_DELETE_LISTA_COMPRAS =
@@ -89,7 +89,7 @@ public class DatabaseContract {
 
     public static final String SQL_CREATE_PRODUCTO =
             "CREATE TABLE " + DataBaseEntry.TABLE_NAME_PRODUCTO + " (" +
-                    DataBaseEntry._ID + TEXT_TYPE + "PRIMARY KEY," +
+                    DataBaseEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
                     DataBaseEntry.COLUMN_NAME_NOMBRE + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_PRECIO + REAL_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_IMAGEN + TEXT_TYPE + " )";
@@ -101,12 +101,12 @@ public class DatabaseContract {
 
     public static final String SQL_CREATE_DETALLE_LISTA =
             "CREATE TABLE " + DataBaseEntry.TABLE_NAME_DETALLE_LISTA + " (" +
-                    DataBaseEntry._ID + TEXT_TYPE + "PRIMARY KEY," +
+                    DataBaseEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
                     DataBaseEntry.COLUMN_NAME_ID_LISTA + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_ID_PRODUCTO + TEXT_TYPE + COMMA_SEP +
-                    "FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_LISTA +
-                    ") REFERENCES " + DataBaseEntry.TABLE_NAME_LISTA_COMPRA + "(" + DataBaseEntry._ID + ")" +
-                    "FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_PRODUCTO +
+                    " FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_LISTA +
+                    ") REFERENCES " + DataBaseEntry.TABLE_NAME_LISTA_COMPRA + "(" + DataBaseEntry._ID + ")" + COMMA_SEP +
+                    " FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_PRODUCTO +
                     ") REFERENCES " + DataBaseEntry.TABLE_NAME_PRODUCTO + "(" + DataBaseEntry._ID + ") )";
 
     public static final String SQL_DELETE_DETALLE_LISTA =
@@ -116,12 +116,12 @@ public class DatabaseContract {
 
     public static final String SQL_CREATE_LISTAS_COMPARTIDAS =
             "CREATE TABLE " + DataBaseEntry.TABLE_NAME_LISTAS_COMPARTIDAS + " (" +
-                    DataBaseEntry._ID + TEXT_TYPE + "PRIMARY KEY," +
+                    DataBaseEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
                     DataBaseEntry.COLUMN_NAME_ID_LISTA + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_ID_USUARIO + TEXT_TYPE + COMMA_SEP +
-                    "FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_LISTA +
-                    ") REFERENCES " + DataBaseEntry.TABLE_NAME_LISTA_COMPRA + "(" + DataBaseEntry._ID + ")" +
-                    "FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_USUARIO +
+                    " FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_LISTA +
+                    ") REFERENCES " + DataBaseEntry.TABLE_NAME_LISTA_COMPRA + "(" + DataBaseEntry._ID + ")" + COMMA_SEP +
+                    " FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_USUARIO +
                     ") REFERENCES " + DataBaseEntry.TABLE_NAME_USUARIO + "(" + DataBaseEntry._ID + ") )";
 
     public static final String SQL_DELETE_LISTAS_COMPARTIDAS =

@@ -89,6 +89,17 @@ public class ListaCompras {
         this.usuariosPermitidos = usuariosPermitidos;
     }
 
+    @Override
+    public String toString() {
+        return "ListaCompras{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", idUsuario='" + idUsuario + '\'' +
+                ", fechaCompra='" + fechaCompra + '\'' +
+                ", montoTotal=" + montoTotal +
+                '}';
+    }
+
     /**
      * Función que inserta una lista de compras en la base de datos
      */
@@ -147,17 +158,18 @@ public class ListaCompras {
         System.out.println(String.valueOf(cursor.getCount()));
         if(cursor.moveToFirst()) {
             do {
-                setId(cursor.getString(cursor.getColumnIndexOrThrow(
+                ListaCompras nFinca = new ListaCompras();
+                nFinca.setId(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry._ID)));
-                setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
+                nFinca.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
-                setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow(
+                nFinca.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO)));
-                setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
+                nFinca.setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA)));
-                setMontoTotal(cursor.getDouble(cursor.getColumnIndexOrThrow(
+                nFinca.setMontoTotal(cursor.getDouble(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL)));
-                misListas.add(this);
+                misListas.add(nFinca);
             } while (cursor.moveToNext());
         }
         return misListas;

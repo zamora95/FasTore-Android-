@@ -33,7 +33,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(DatabaseContract.SQL_CREATE_LISTA_COMPRAS);
         db.execSQL(DatabaseContract.SQL_CREATE_PRODUCTO);
         db.execSQL(DatabaseContract.SQL_CREATE_DETALLE_LISTA);
-        //db.execSQL(DatabaseContract.SQL_CREATE_LISTA_COMPARTIDAS);
+        db.execSQL(DatabaseContract.SQL_CREATE_LISTAS_COMPARTIDAS);
+        db.execSQL("insert into usuarios (" + DatabaseContract.DataBaseEntry._ID + ",email,nombre,apellido) values('10','k@gmail.com','Kevin','Zamora')");
+        db.execSQL("insert into usuarios (" + DatabaseContract.DataBaseEntry._ID + ",email,nombre,apellido) values('11','e@gmail.com','Elsa','Arias')");
+        db.execSQL("insert into listas_compra (" + DatabaseContract.DataBaseEntry._ID + ",nombre,id_usuario,fecha_compra,monto_total) values('1','Lista 1','10','2017-04-01',25.08)");
+        db.execSQL("insert into listas_compra (" + DatabaseContract.DataBaseEntry._ID + ",nombre,id_usuario,fecha_compra,monto_total) values('2','Lista 2','10','2017-04-01',33.51)");
+        db.execSQL("insert into listas_compra (" + DatabaseContract.DataBaseEntry._ID + ",nombre,id_usuario,fecha_compra,monto_total) values('3','Lista 3','11','2017-04-01',33.51)");
+
     }
 
     @Override
@@ -43,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL(DatabaseContract.SQL_DELETE_LISTA_COMPRAS);
         db.execSQL(DatabaseContract.SQL_DELETE_PRODUCTO);
         db.execSQL(DatabaseContract.SQL_DELETE_DETALLE_LISTA);
-       // db.execSQL(DatabaseContract.SQL_DELETE_LISTA_COMPARTIDAS);
+        db.execSQL(DatabaseContract.SQL_DELETE_LISTAS_COMPARTIDAS);
         onCreate(db);
     }
 }
