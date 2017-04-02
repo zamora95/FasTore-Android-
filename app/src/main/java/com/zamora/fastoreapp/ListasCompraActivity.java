@@ -1,7 +1,6 @@
 package com.zamora.fastoreapp;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
@@ -57,8 +56,7 @@ public class ListasCompraActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
-        MenuItem item = menu.findItem(R.id.menuSearch);
-
+        /*MenuItem item = menu.findItem(R.id.itemSearch);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQueryHint("Buscar...");
 
@@ -73,8 +71,23 @@ public class ListasCompraActivity extends AppCompatActivity{
                 adapter.getFilter().filter(newText);
                 return false;
             }
-        });
-
-        return super.onCreateOptionsMenu(menu);
+        });*/
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.itemAdd:
+                AlertDialog alert = new AlertDialog();
+                alert.showDialog(this);
+                return true;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 }
