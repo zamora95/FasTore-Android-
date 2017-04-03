@@ -1,6 +1,8 @@
 package com.zamora.fastoreapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
@@ -25,11 +27,13 @@ public class ListasCompraActivity extends AppCompatActivity{
     private static String usuario;
     private AdapterListasComprasUsuario adapter;
     private int listaSeleccionada;
+    public static String fechaSeleccionada;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_compras);
+        getSupportActionBar().setTitle("Mis listas de compra");
         //usuario = getIntent().getExtras().getString("usuario");
         usuario = "10";
         cargarListas();
@@ -79,8 +83,9 @@ public class ListasCompraActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemAdd:
-                AlertDialog alert = new AlertDialog();
-                alert.showDialog(this);
+                Intent nuevaLista = new Intent(this, NuevaListaActivity.class);
+                nuevaLista.putExtra("cantListas", arregloListasCompra.size()+1);
+                startActivity(nuevaLista);
                 return true;
 
 
@@ -88,6 +93,7 @@ public class ListasCompraActivity extends AppCompatActivity{
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 
 }

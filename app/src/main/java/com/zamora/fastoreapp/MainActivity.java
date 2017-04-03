@@ -101,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Email.setText(email);
             // Glide.with(this).load(imgUrl).into(ProfPic);
             updateUI(true);
+
+            Intent listasCompra = new Intent(this, ListasCompraActivity.class);
+            startActivity(listasCompra);
+            finish();
         }
         else{
             updateUI(false);
