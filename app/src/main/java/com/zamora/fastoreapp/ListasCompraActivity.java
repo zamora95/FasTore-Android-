@@ -83,9 +83,13 @@ public class ListasCompraActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemAdd:
-                Intent nuevaLista = new Intent(this, NuevaListaActivity.class);
-                nuevaLista.putExtra("cantListas", arregloListasCompra.size()+1);
-                startActivity(nuevaLista);
+                //Intent nuevaLista = new Intent(this, NuevaListaActivity.class);
+                //nuevaLista.putExtra("cantListas", arregloListasCompra.size()+1);
+                //startActivity(nuevaLista);
+
+                NuevaListaDialog nla = new NuevaListaDialog(ListasCompraActivity.this, usuario, arregloListasCompra.size()+1);
+                nla.show();
+
                 return true;
 
 
