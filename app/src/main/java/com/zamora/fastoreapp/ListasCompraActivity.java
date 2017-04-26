@@ -10,9 +10,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.zamora.fastoreapp.Adapters.AdapterListasComprasUsuario;
 import com.zamora.fastoreapp.Clases.ListaCompras;
 
@@ -28,17 +33,39 @@ public class ListasCompraActivity extends AppCompatActivity{
     private AdapterListasComprasUsuario adapter;
     private int listaSeleccionada;
     public static String fechaSeleccionada;
+    private LinearLayout ProfSection;
+    private Button SingOut;
+    private TextView Name,Email;
+    private ImageView ProfPic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_compras);
+        ProfSection = (LinearLayout) findViewById(R.id.profSection);
+        SingOut = (Button) findViewById(R.id.btnLogOut);
+        Name = (TextView) findViewById(R.id.name);
+        Email = (TextView) findViewById(R.id.email);
+        ProfPic = (ImageView) findViewById(R.id.profPic);
+        String nombre = getIntent().getExtras().getString("nombre");
+        String email = getIntent().getExtras().getString("email");
+        String imagen = getIntent().getExtras().getString("image");
+        Name.setText(nombre);
+        Email.setText(email);
+        try {
+            Glide.with(this).load(imagen).into(ProfPic);
+        } catch (Exception e) {}
         getSupportActionBar().setTitle("Mis listas de compra");
         //usuario = getIntent().getExtras().getString("usuario");
         usuario = "10";
         cargarListas();
+        SingOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
-
     public void cargarListas(){
         ListaCompras instancia = new ListaCompras();
         arregloListasCompra = instancia.leer(this, usuario);

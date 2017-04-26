@@ -26,11 +26,8 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
-    private LinearLayout ProfSection;
-    private Button SingOut;
+
     private SignInButton SingIn;
-    private TextView Name,Email;
-    private ImageView ProfPic;
     private GoogleApiClient googleApiClient;
     private static final int REQ_CODE = 9001;
 
@@ -39,15 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ProfSection = (LinearLayout)findViewById(R.id.profSection);
-        SingOut = (Button)findViewById(R.id.btnLogOut);
         SingIn = (SignInButton) findViewById(R.id.btnLogin);
-        Name = (TextView)findViewById(R.id.name);
-        Email = (TextView)findViewById(R.id.email);
-        ProfPic = (ImageView)findViewById(R.id.profPic);
         SingIn.setOnClickListener(this);
-        SingOut.setOnClickListener(this);
-        ProfSection.setVisibility(View.GONE);
         GoogleSignInOptions singInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,singInOptions).build();
 
@@ -60,9 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLogin:
                 singIn();
                 break;
-            case R.id.btnLogOut:
-                singOut();
-                break;
+
         }
 
     }
@@ -82,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
-                updateUI(false);
+                updateUI(false,"","","");
             }
         });
     }
@@ -92,33 +80,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
+            String imgUrl = "";
             try {
-                String imgUrl = account.getPhotoUrl().toString();
-                Glide.with(this).load(imgUrl).into(ProfPic);
+                imgUrl = account.getPhotoUrl().toString();
+
             } catch (Exception e) {}
 
-            Name.setText(name);
-            Email.setText(email);
+            //Name.setText(name);
+            //Email.setText(email);
             // Glide.with(this).load(imgUrl).into(ProfPic);
-            updateUI(true);
-
-            Intent listasCompra = new Intent(this, ListasCompraActivity.class);
-            startActivity(listasCompra);
-            finish();
+            updateUI(true,name,email,imgUrl);
         }
         else{
-            updateUI(false);
+            updateUI(false,"","","");
         }
     }
 
-    private void updateUI(boolean isLogin){
+    private void updateUI(boolean isLogin,String name,String email,String image){
         if(isLogin){
-            ProfSection.setVisibility(View.VISIBLE);
-            SingIn.setVisibility(View.GONE);
+            Intent listasCompra = new Intent(this, ListasCompraActivity.class);
+            listasCompra.putExtra("nombre",name);
+            listasCompra.putExtra("email",email);
+            listasCompra.putExtra("image",image);
+            startActivity(listasCompra);
+            //finish();
         }
         else{
-            ProfSection.setVisibility(View.GONE);
-            SingIn.setVisibility(View.VISIBLE);
+
         }
     }
 
