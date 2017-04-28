@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SingIn = (SignInButton) findViewById(R.id.btnLogin);
+
         SingIn.setOnClickListener(this);
         GoogleSignInOptions singInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,singInOptions).build();
-
     }
 
     @Override
@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLogin:
                 singIn();
                 break;
-
         }
 
     }
@@ -65,12 +64,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(intent,REQ_CODE);
 
     }
-
-    private void singOut(){
+    public void singOut(){
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
-                updateUI(false,"","","");
+                finish();
             }
         });
     }
@@ -82,33 +80,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String email = account.getEmail();
             String imgUrl = "";
             try {
-                imgUrl = account.getPhotoUrl().toString();
+                 imgUrl = account.getPhotoUrl().toString();
 
             } catch (Exception e) {}
 
-            //Name.setText(name);
-            //Email.setText(email);
-            // Glide.with(this).load(imgUrl).into(ProfPic);
-            updateUI(true,name,email,imgUrl);
-        }
-        else{
-            updateUI(false,"","","");
-        }
-    }
-
-    private void updateUI(boolean isLogin,String name,String email,String image){
-        if(isLogin){
             Intent listasCompra = new Intent(this, ListasCompraActivity.class);
             listasCompra.putExtra("nombre",name);
             listasCompra.putExtra("email",email);
-            listasCompra.putExtra("image",image);
+            listasCompra.putExtra("image",imgUrl);
             startActivity(listasCompra);
-            //finish();
+
         }
         else{
 
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

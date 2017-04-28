@@ -52,20 +52,27 @@ public class ListasCompraActivity extends AppCompatActivity{
         String imagen = getIntent().getExtras().getString("image");
         Name.setText(nombre);
         Email.setText(email);
-        try {
+        if(imagen != "") {
             Glide.with(this).load(imagen).into(ProfPic);
-        } catch (Exception e) {}
+        } else {
+            ProfPic.setImageResource(R.drawable.photo);
+        }
         getSupportActionBar().setTitle("Mis listas de compra");
         //usuario = getIntent().getExtras().getString("usuario");
         usuario = "10";
         cargarListas();
         SingOut.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                finish();
+                MainActivity main = new MainActivity();
+                main.singOut();
             }
         });
     }
+
+
+
     public void cargarListas(){
         ListaCompras instancia = new ListaCompras();
         arregloListasCompra = instancia.leer(this, usuario);
