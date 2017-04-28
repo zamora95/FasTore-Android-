@@ -9,6 +9,8 @@ import android.net.Uri;
 import com.zamora.fastoreapp.Database.DatabaseContract;
 import com.zamora.fastoreapp.Database.DatabaseHelper;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by Zamora on 29/03/2017.
@@ -19,16 +21,20 @@ public class Usuario {
     private String nombre;
     private String email;
     private String id;
-    private Uri fotoURL;
+    private ArrayList<ListaCompras> listasCompras;
 
-    public Usuario(){}
+    public Usuario() {
+        this.apellido = null;
+        this.nombre = null;
+        this.email = null;
+        this.id = null;
+    }
 
-    public Usuario(String apellido, String nombre, String email, String id, Uri fotoURL) {
+    public Usuario(String apellido, String nombre, String email, String id) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.email = email;
         this.id = id;
-        this.fotoURL = fotoURL;
     }
 
     public String getApellido() {
@@ -47,10 +53,6 @@ public class Usuario {
         return id;
     }
 
-    public Uri getFotoURL() {
-        return fotoURL;
-    }
-
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
@@ -67,8 +69,12 @@ public class Usuario {
         this.id = id;
     }
 
-    public void setFotoURL(Uri fotoURL) {
-        this.fotoURL = fotoURL;
+    public ArrayList<ListaCompras> getListasCompras() {
+        return listasCompras;
+    }
+
+    public void setListasCompras(ArrayList<ListaCompras> listasCompras) {
+        this.listasCompras = listasCompras;
     }
 
     /**
@@ -84,7 +90,6 @@ public class Usuario {
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_APELLIDO, getApellido());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE, getNombre());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_EMAIL, getEmail());
-        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_FOTO_USUARIO, getFotoURL().toString());
 
         // Insertar la nueva fila
         return db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_USUARIO, null, values);
@@ -105,8 +110,7 @@ public class Usuario {
                 DatabaseContract.DataBaseEntry._ID,
                 DatabaseContract.DataBaseEntry.COLUMN_NAME_APELLIDO,
                 DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE,
-                DatabaseContract.DataBaseEntry.COLUMN_NAME_EMAIL,
-                DatabaseContract.DataBaseEntry.COLUMN_NAME_FOTO_USUARIO,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_EMAIL
         };
 
         // Filtro para el WHERE
@@ -127,15 +131,72 @@ public class Usuario {
         // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
         System.out.println(String.valueOf(cursor.getCount()));
         if(cursor.moveToFirst() && cursor.getCount() > 0) {
-            setId(cursor.getString(cursor.getColumnIndexOrThrow(
+            this.setId(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry._ID)));
-            setApellido(cursor.getString(cursor.getColumnIndexOrThrow(
+            this.setApellido(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_APELLIDO)));
-            setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
+            this.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
-            setEmail(cursor.getString(cursor.getColumnIndexOrThrow(
+            this.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_EMAIL)));
         }
+
+        this.setListasCompras(leerListasUsuario(context, identificacion));
+    }
+
+
+    /**
+     * Leer las listas de compras pertenecientes a un usuario
+     */
+    public ArrayList<ListaCompras> leerListasUsuario (Context context, String usuario){
+        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+
+        // Obtiene la base de datos en modo lectura
+        SQLiteDatabase db = DatabaseHelper.getReadableDatabase();
+
+        // Define cuales columnas quiere solicitar // en este caso todas las de la clase
+        String[] projection = {
+                DatabaseContract.DataBaseEntry._ID,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL,
+        };
+
+        // Filtro para el WHERE
+        String selection = DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO + " = ?";
+        String[] selectionArgs = {usuario};
+
+        // Resultados en el cursor
+        Cursor cursor = db.query(
+                DatabaseContract.DataBaseEntry.TABLE_NAME_LISTA_COMPRA, // tabla
+                projection, // columnas
+                selection, // where
+                selectionArgs, // valores del where
+                null, // agrupamiento
+                null, // filtros por grupo
+                null // orden
+        );
+
+        ArrayList<ListaCompras> misListas = new ArrayList<>();
+        System.out.println(String.valueOf(cursor.getCount()));
+        if(cursor.moveToFirst()) {
+            do {
+                ListaCompras miLista = new ListaCompras();
+                miLista.setId(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry._ID)));
+                miLista.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
+                miLista.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO)));
+                miLista.setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA)));
+                miLista.setMontoTotal(cursor.getDouble(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL)));
+                misListas.add(miLista);
+            } while (cursor.moveToNext());
+        }
+        return misListas;
     }
 
 
