@@ -29,7 +29,8 @@ import java.util.ArrayList;
 
 public class ListasCompraActivity extends AppCompatActivity{
     public static ArrayList<ListaCompras> arregloListasCompra;
-    private static String usuario;
+    private static String idUsuario;
+    private Usuario usuario;
     private AdapterListasComprasUsuario adapter;
     private int listaSeleccionada;
     public static String fechaSeleccionada;
@@ -58,8 +59,10 @@ public class ListasCompraActivity extends AppCompatActivity{
             ProfPic.setImageResource(R.drawable.photo);
         }
         getSupportActionBar().setTitle("Mis listas de compra");
-        //usuario = getIntent().getExtras().getString("usuario");
-        usuario = "10";
+        //idUsuario = getIntent().getExtras().getString("idUsuario");
+        idUsuario = "10";
+
+        leerUsuario(idUsuario);
         cargarListas();
         SingOut.setOnClickListener(new View.OnClickListener() {
 
@@ -71,8 +74,13 @@ public class ListasCompraActivity extends AppCompatActivity{
         });
     }
 
+    
+    public void leerUsuario(String identificacion) {
+        this.usuario = new Usuario();
+        this.usuario.leer(getApplicationContext(), identificacion);
+    }
 
-
+    
     public void cargarListas(){
         ListaCompras instancia = new ListaCompras();
         arregloListasCompra = instancia.leer(this, usuario);
