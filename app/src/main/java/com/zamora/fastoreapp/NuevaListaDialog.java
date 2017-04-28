@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class NuevaListaDialog extends Dialog implements View.OnClickListener{
     private String idUsuario;
     private int cantListas;
     private EditText txtFecha, txtHora, txtNombre;
+    private Button btnCrearLista;
     private int dd, mm, yyyy, hora, minuto;
     public Context context;
 
@@ -59,13 +61,13 @@ public class NuevaListaDialog extends Dialog implements View.OnClickListener{
         txtFecha = (EditText) findViewById(R.id.fecha_input);
         txtHora = (EditText) findViewById(R.id.hora_input);
         txtNombre = (EditText) findViewById(R.id.nombre_input);
+        btnCrearLista = (Button) findViewById(R.id.btnCrear);
 
         txtNombre.setText("Lista de compras " + cantListas);
 
-
         txtFecha.setOnClickListener(this);
-
         txtHora.setOnClickListener(this);
+        btnCrearLista.setOnClickListener(this);
     }
 
     @Override
@@ -122,7 +124,8 @@ public class NuevaListaDialog extends Dialog implements View.OnClickListener{
                 nuevaLista.setIdUsuario(idUsuario);
                 nuevaLista.setFechaCompra(txtFecha.getText().toString());
                 dismiss();
-                Toast.makeText(context, nuevaLista.toString(), Toast.LENGTH_SHORT);
+                Toast.makeText(context, nuevaLista.toString(), Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(this, )
                 break;
 
             default:

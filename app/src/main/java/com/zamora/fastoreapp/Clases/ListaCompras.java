@@ -123,7 +123,7 @@ public class ListaCompras {
     /**
      * Leer una lista de compras desde la base de datos
      */
-    public ArrayList<ListaCompras> leer (Context context, /*String identificacion*/ String usuario){
+    public void leer (Context context, String identificacion){
         DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
 
         // Obtiene la base de datos en modo lectura
@@ -141,7 +141,7 @@ public class ListaCompras {
         // Filtro para el WHERE
         //String selection = DatabaseContract.DataBaseEntry._ID + " = ?";
         String selection = DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO + " = ?";
-        String[] selectionArgs = {usuario/*identificacion*/};
+        String[] selectionArgs = {identificacion};
 
         // Resultados en el cursor
         Cursor cursor = db.query(
@@ -154,25 +154,72 @@ public class ListaCompras {
                 null // orden
         );
 
-        ArrayList<ListaCompras> misListas = new ArrayList<>();
+        System.out.println(String.valueOf(cursor.getCount()));
+        if(cursor.moveToFirst() && cursor.getCount() > 0) {
+            this.setId(cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry._ID)));
+            this.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
+            this.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO)));
+            this.setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA)));
+            this.setMontoTotal(cursor.getDouble(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL)));
+        }
+        this.setDetalle(leerProductosCompra(context, identificacion));
+    }
+
+
+    /**
+     * Leer los productos grabados en cada lista del usuario
+     */
+    public ArrayList<Producto> leerProductosCompra (Context context, String listaID){
+        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+
+        // Obtiene la base de datos en modo lectura
+        SQLiteDatabase db = DatabaseHelper.getReadableDatabase();
+
+        // Define cuales columnas quiere solicitar // en este caso todas las de la clase
+        String[] projection = {
+                DatabaseContract.DataBaseEntry._ID,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN
+        };
+
+        // Filtro para el WHERE
+        String selection = DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA + " = ?";
+        String[] selectionArgs = {listaID};
+
+        // Resultados en el cursor
+        Cursor cursor = db.query(
+                DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA, // tabla
+                projection, // columnas
+                selection, // where
+                selectionArgs, // valores del where
+                null, // agrupamiento
+                null, // filtros por grupo
+                null // orden
+        );
+
+        ArrayList<Producto> misProductos = new ArrayList<>();
         System.out.println(String.valueOf(cursor.getCount()));
         if(cursor.moveToFirst()) {
             do {
-                ListaCompras nFinca = new ListaCompras();
-                nFinca.setId(cursor.getString(cursor.getColumnIndexOrThrow(
+                /*Producto miProducto = new Producto();
+                miProducto.setId(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry._ID)));
-                nFinca.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
+                miProducto.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
-                nFinca.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow(
+                miProducto.set(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO)));
-                nFinca.setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
+                miProducto.setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA)));
-                nFinca.setMontoTotal(cursor.getDouble(cursor.getColumnIndexOrThrow(
-                        DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL)));
-                misListas.add(nFinca);
+                misProductos.add(miProducto);*/
             } while (cursor.moveToNext());
         }
-        return misListas;
+        return misProductos;
     }
 
 

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.zamora.fastoreapp.Adapters.AdapterListasComprasUsuario;
 import com.zamora.fastoreapp.Clases.ListaCompras;
+import com.zamora.fastoreapp.Clases.Usuario;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public class ListasCompraActivity extends AppCompatActivity{
         Name = (TextView) findViewById(R.id.name);
         Email = (TextView) findViewById(R.id.email);
         ProfPic = (ImageView) findViewById(R.id.profPic);
-        String nombre = getIntent().getExtras().getString("nombre");
+        /*String nombre = getIntent().getExtras().getString("nombre");
         String email = getIntent().getExtras().getString("email");
         String imagen = getIntent().getExtras().getString("image");
         Name.setText(nombre);
@@ -57,7 +58,7 @@ public class ListasCompraActivity extends AppCompatActivity{
             Glide.with(this).load(imagen).into(ProfPic);
         } else {
             ProfPic.setImageResource(R.drawable.photo);
-        }
+        }*/
         getSupportActionBar().setTitle("Mis listas de compra");
         //idUsuario = getIntent().getExtras().getString("idUsuario");
         idUsuario = "10";
@@ -83,7 +84,7 @@ public class ListasCompraActivity extends AppCompatActivity{
     
     public void cargarListas(){
         ListaCompras instancia = new ListaCompras();
-        arregloListasCompra = instancia.leer(this, usuario);
+        arregloListasCompra = usuario.getListasCompras();
 
         ListView lv = (ListView) findViewById(R.id.listaCompras);
         adapter = new AdapterListasComprasUsuario(this, arregloListasCompra);
@@ -129,7 +130,7 @@ public class ListasCompraActivity extends AppCompatActivity{
                 //nuevaLista.putExtra("cantListas", arregloListasCompra.size()+1);
                 //startActivity(nuevaLista);
 
-                NuevaListaDialog nla = new NuevaListaDialog(ListasCompraActivity.this, usuario, arregloListasCompra.size()+1);
+                NuevaListaDialog nla = new NuevaListaDialog(ListasCompraActivity.this, idUsuario, arregloListasCompra.size()+1);
                 nla.show();
 
                 return true;
