@@ -59,6 +59,15 @@ public class Producto {
         this.imagen = imagen;
     }
 
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                '}';
+    }
+
     /**
      * Función que inserta un producto en la base de datos
      */

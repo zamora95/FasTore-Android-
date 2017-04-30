@@ -123,9 +123,12 @@ public class NuevaListaDialog extends Dialog implements View.OnClickListener{
                 nuevaLista.setNombre(txtNombre.getText().toString());
                 nuevaLista.setIdUsuario(idUsuario);
                 nuevaLista.setFechaCompra(txtFecha.getText().toString());
-                dismiss();
-                Toast.makeText(context, nuevaLista.toString(), Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(this, )
+                nuevaLista.insertar(context);
+                Intent intent = new Intent(context, ProductosListaActivity.class);
+                intent.putExtra("idLista", nuevaLista.getId());
+                this.dismiss();
+                //Toast.makeText(context, nuevaLista.toString(), Toast.LENGTH_SHORT).show();
+                context.startActivity(intent);
                 break;
 
             default:

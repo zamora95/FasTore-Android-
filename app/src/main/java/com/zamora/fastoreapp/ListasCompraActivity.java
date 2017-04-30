@@ -40,6 +40,10 @@ public class ListasCompraActivity extends AppCompatActivity{
     private TextView Name,Email;
     private ImageView ProfPic;
 
+    public ArrayList<ListaCompras> getListas() {
+        return usuario.getListasCompras();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +87,6 @@ public class ListasCompraActivity extends AppCompatActivity{
 
     
     public void cargarListas(){
-        ListaCompras instancia = new ListaCompras();
         arregloListasCompra = usuario.getListasCompras();
 
         ListView lv = (ListView) findViewById(R.id.listaCompras);
@@ -94,9 +97,24 @@ public class ListasCompraActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 listaSeleccionada = arregloListasCompra.indexOf(parent.getAdapter().getItem(position));
+                //Toast.makeText(getApplicationContext(), String.valueOf(listaSeleccionada), Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), parent.getAdapter().getItem(position).toString(), Toast.LENGTH_LONG).show();
+
+                ListaCompras selectedList = (ListaCompras) parent.getAdapter().getItem(position);
+                //String idLista = (ListaCompras) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(getApplicationContext(), ProductosListaActivity.class);
+                intent.putExtra("idLista", selectedList.getId());
+                startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     @Override

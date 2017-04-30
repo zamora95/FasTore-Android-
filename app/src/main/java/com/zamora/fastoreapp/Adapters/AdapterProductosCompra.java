@@ -21,29 +21,28 @@ import java.util.ArrayList;
  */
 
 public class AdapterProductosCompra extends BaseAdapter implements Filterable {
-
     protected Activity activity;
     private static LayoutInflater inflater = null;
 
-    protected ArrayList<Producto> originalProducts;
-    protected ArrayList<Producto> filteredProducts;
+    protected ArrayList<Producto> originalItems;
+    protected ArrayList<Producto> filteredItems;
 
-    public AdapterProductosCompra(Activity activity, ArrayList<Producto> products) {
+    public AdapterProductosCompra(Activity activity, ArrayList<Producto> items) {
         this.activity = activity;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        this.originalProducts = products;
-        this.originalProducts = products;
+        this.originalItems = items;
+        this.filteredItems = items;
     }
 
     @Override
     public int getCount() {
-        return filteredProducts.size();
+        return filteredItems.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return filteredProducts.get(position);
+        return filteredItems.get(position);
     }
 
     @Override
@@ -60,13 +59,10 @@ public class AdapterProductosCompra extends BaseAdapter implements Filterable {
             v = inflater.inflate(R.layout.item_producto_compra, null);
         }
 
-        Producto producto = filteredProducts.get(position);
-
-        ImageView imagen = (ImageView) v.findViewById(R.id.productImage);
-        imagen.setImageResource(Integer.parseInt(producto.getImagen()));
+        Producto dir = filteredItems.get(position);
 
         TextView nombre = (TextView) v.findViewById(R.id.productName);
-        nombre.setText(producto.getNombre());
+        nombre.setText(dir.getNombre());
 
         //v.setBackgroundColor(Color.parseColor("#3f834D"));
         v.setPadding(50,50,50,50);
@@ -81,14 +77,14 @@ public class AdapterProductosCompra extends BaseAdapter implements Filterable {
                 FilterResults results = new FilterResults();
 
                 if (constraint == null || constraint.length() == 0){
-                    results.values = originalProducts;
-                    results.count = originalProducts.size();
+                    results.values = originalItems;
+                    results.count = originalItems.size();
                 }
                 else{
                     String filterString = constraint.toString().toLowerCase();
 
                     ArrayList<Producto> filterResultsData = new ArrayList<>();
-                    for (Producto data : originalProducts){
+                    for (Producto data : originalItems){
                         if (data.getNombre().toLowerCase().contains(filterString)){
                             filterResultsData.add(data);
                         }
@@ -101,7 +97,7 @@ public class AdapterProductosCompra extends BaseAdapter implements Filterable {
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredProducts = (ArrayList<Producto>) results.values;
+                filteredItems = (ArrayList<Producto>) results.values;
                 notifyDataSetChanged();
             }
         };

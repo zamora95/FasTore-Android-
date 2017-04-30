@@ -38,24 +38,12 @@ public class AdapterListasComprasUsuario extends BaseAdapter implements Filterab
 
     @Override
     public int getCount() {
-
         return filteredItems.size();
     }
 
-    public void clear() {
-        originalItems.clear();
-    }
-
-    public void addAll(ArrayList<ListaCompras> compras) {
-        for (int i = 0; i < compras.size(); i++) {
-            originalItems.add(compras.get(i));
-        }
-    }
-
     @Override
-    public Object getItem(int arg0) {
-
-        return filteredItems.get(arg0);
+    public Object getItem(int position) {
+        return filteredItems.get(position);
     }
 
     @Override
@@ -82,11 +70,7 @@ public class AdapterListasComprasUsuario extends BaseAdapter implements Filterab
 
         //v.setBackgroundColor(Color.parseColor("#3f834D"));
         v.setPadding(50,50,50,50);
-
-
-
         return v;
-
     }
 
     @Override

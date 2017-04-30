@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.zamora.fastoreapp.Database.DatabaseContract;
 import com.zamora.fastoreapp.Database.DatabaseHelper;
@@ -23,7 +24,10 @@ public class ListaCompras {
     private ArrayList<Producto> detalle;
     private ArrayList<Usuario> usuariosPermitidos;
 
-    public ListaCompras(){}
+    public ListaCompras(){
+        detalle = new ArrayList<>();
+        usuariosPermitidos = new ArrayList<>();
+    }
 
     public ListaCompras(String id, String nombre,String idUsuario, String fechaCompra, Double montoTotal) {
         this.id = id;
@@ -31,6 +35,8 @@ public class ListaCompras {
         this.idUsuario = idUsuario;
         this.fechaCompra = fechaCompra;
         this.montoTotal = montoTotal;
+        detalle = new ArrayList<>();
+        usuariosPermitidos = new ArrayList<>();
     }
 
     public String getId() {
@@ -140,7 +146,7 @@ public class ListaCompras {
 
         // Filtro para el WHERE
         //String selection = DatabaseContract.DataBaseEntry._ID + " = ?";
-        String selection = DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO + " = ?";
+        String selection = DatabaseContract.DataBaseEntry._ID + " = ?";
         String[] selectionArgs = {identificacion};
 
         // Resultados en el cursor
@@ -154,7 +160,6 @@ public class ListaCompras {
                 null // orden
         );
 
-        System.out.println(String.valueOf(cursor.getCount()));
         if(cursor.moveToFirst() && cursor.getCount() > 0) {
             this.setId(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry._ID)));
@@ -168,6 +173,7 @@ public class ListaCompras {
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL)));
         }
         this.setDetalle(leerProductosCompra(context, identificacion));
+
     }
 
 
@@ -176,47 +182,47 @@ public class ListaCompras {
      */
     public ArrayList<Producto> leerProductosCompra (Context context, String listaID){
         DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+        //Create new querybuilder
+        SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
 
-        // Obtiene la base de datos en modo lectura
+        //Specify books table and add join to categories table (use full_id for joining categories table)
+        _QB.setTables(DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA +
+                " INNER JOIN " + DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO + " ON " +
+                DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA + "." + DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_PRODUCTO +
+                " = " +
+                DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO + "." + DatabaseContract.DataBaseEntry._ID);
+
+        //Open database connection
         SQLiteDatabase db = DatabaseHelper.getReadableDatabase();
 
         // Define cuales columnas quiere solicitar // en este caso todas las de la clase
         String[] projection = {
-                DatabaseContract.DataBaseEntry._ID,
-                DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE,
-                DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO,
-                DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN
+                DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO + "." + DatabaseContract.DataBaseEntry._ID,
+                DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO + "." + DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE,
+                DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO + "." + DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO,
+                DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO + "." + DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN
         };
 
         // Filtro para el WHERE
-        String selection = DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA + " = ?";
+        String selection = DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA + "." + DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA + " = ?";
         String[] selectionArgs = {listaID};
 
-        // Resultados en el cursor
-        Cursor cursor = db.query(
-                DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA, // tabla
-                projection, // columnas
-                selection, // where
-                selectionArgs, // valores del where
-                null, // agrupamiento
-                null, // filtros por grupo
-                null // orden
-        );
+        //Get cursor
+        Cursor cursor = _QB.query(db, projection, selection, selectionArgs, null, null, null);
 
         ArrayList<Producto> misProductos = new ArrayList<>();
-        System.out.println(String.valueOf(cursor.getCount()));
         if(cursor.moveToFirst()) {
             do {
-                /*Producto miProducto = new Producto();
+                Producto miProducto = new Producto();
                 miProducto.setId(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry._ID)));
                 miProducto.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
-                miProducto.set(cursor.getString(cursor.getColumnIndexOrThrow(
-                        DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_USUARIO)));
-                miProducto.setFechaCompra(cursor.getString(cursor.getColumnIndexOrThrow(
-                        DatabaseContract.DataBaseEntry.COLUMN_NAME_FECHA_COMPRA)));
-                misProductos.add(miProducto);*/
+                miProducto.setPrecio(cursor.getDouble(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO)));
+                miProducto.setImagen(cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN)));
+                misProductos.add(miProducto);
             } while (cursor.moveToNext());
         }
         return misProductos;
