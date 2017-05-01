@@ -173,7 +173,7 @@ public class ListaCompras {
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL)));
         }
         this.setDetalle(leerProductosCompra(context, identificacion));
-
+        db.close();
     }
 
 
@@ -225,6 +225,7 @@ public class ListaCompras {
                 misProductos.add(miProducto);
             } while (cursor.moveToNext());
         }
+        db.close();
         return misProductos;
     }
 

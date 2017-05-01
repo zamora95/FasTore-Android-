@@ -98,7 +98,7 @@ public class ListasCompraActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 listaSeleccionada = arregloListasCompra.indexOf(parent.getAdapter().getItem(position));
                 //Toast.makeText(getApplicationContext(), String.valueOf(listaSeleccionada), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), parent.getAdapter().getItem(position).toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), parent.getAdapter().getItem(position).toString(), Toast.LENGTH_LONG).show();
 
                 ListaCompras selectedList = (ListaCompras) parent.getAdapter().getItem(position);
                 //String idLista = (ListaCompras) parent.getAdapter().getItem(position);

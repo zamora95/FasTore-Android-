@@ -75,17 +75,17 @@ public class Producto {
         DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = DatabaseHelper.getWritableDatabase();
 
+        setId(String.valueOf(leerUltimoProducto(context) + 1));
         // Crear un mapa de valores donde las columnas son las llaves
         ContentValues values = new ContentValues();
-        //values.put(DatabaseContract.DataBaseEntry._ID, getId());
+        values.put(DatabaseContract.DataBaseEntry._ID, getId());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE, getNombre());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO, getPrecio());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN, getImagen());
+        System.out.println("Se va a insertar el " + toString());
 
         // Insertar la nueva fila
         long idRetorno = db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, null, values);
-        System.out.println("El id de retorno de " + getNombre() + " es " + idRetorno);
-        setId(String.valueOf(idRetorno));
         return idRetorno;
     }
 
@@ -97,6 +97,9 @@ public class Producto {
         // Crear un mapa de valores donde las columnas son las llaves
         ContentValues values = new ContentValues();
         System.out.println("Insertando en detalle");
+        int id = leerUltimoDetalle(context) + 1;
+        System.out.println("El id del detalle es " + id);
+        values.put(DatabaseContract.DataBaseEntry._ID, String.valueOf(id));
         System.out.println("El id de la de la lista es " + idLista);
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA, idLista);
         System.out.println("El id del producto es " + getId());
@@ -142,7 +145,6 @@ public class Producto {
         );
 
         // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
-        System.out.println(String.valueOf(cursor.getCount()));
         if(cursor.moveToFirst() && cursor.getCount() > 0) {
             setId(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry._ID)));
@@ -153,13 +155,14 @@ public class Producto {
             setImagen(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN)));
         }
+        db.close();
     }
 
 
     /**
      * Leer el último registro de la tabla producto
      */
-    public void leerUltimoProducto (Context context){
+    public int leerUltimoProducto (Context context){
         DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
 
         // Obtiene la base de datos en modo lectura
@@ -167,14 +170,11 @@ public class Producto {
 
         // Define cuales columnas quiere solicitar // en este caso todas las de la clase
         String[] projection = {
-                DatabaseContract.DataBaseEntry._ID,
-                DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE,
-                DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO,
-                DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN,
+                DatabaseContract.DataBaseEntry._ID
         };
 
         // Orden
-        String orderBy = DatabaseContract.DataBaseEntry._ID + " ASC";
+        String orderBy = DatabaseContract.DataBaseEntry._ID + " DESC";
         // Límite 1
         String limit = "1";
 
@@ -190,19 +190,95 @@ public class Producto {
                 limit
         );
 
+        int ultimoID = -1;
         // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
         if(cursor.moveToFirst() && cursor.getCount() > 0) {
-            setId(cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry._ID)));
-            setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
-            setPrecio(cursor.getDouble(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO)));
-            setImagen(cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN)));
+            ultimoID = cursor.getInt(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry._ID));
+        }
+        db.close();
+        System.out.println("El id de la ultima fila de la tabla productos es " + ultimoID);
+        return ultimoID;
+    }
+
+
+    public int leerUltimoDetalle (Context context){
+        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+
+        // Obtiene la base de datos en modo lectura
+        SQLiteDatabase db = DatabaseHelper.getReadableDatabase();
+
+        // Define cuales columnas quiere solicitar // en este caso todas las de la clase
+        String[] projection = {
+                DatabaseContract.DataBaseEntry._ID
+        };
+
+        // Orden
+        String orderBy = DatabaseContract.DataBaseEntry._ID + " DESC";
+        // Límite 1
+        String limit = "1";
+
+        // Resultados en el cursor
+        Cursor cursor = db.query(
+                DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA, // tabla
+                projection, // columnas
+                null, // where
+                null, // valores del where
+                null, // agrupamiento
+                null, // filtros por grupo
+                orderBy, // orden
+                limit
+        );
+
+        int ultimoID = -1;
+        // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
+        if(cursor.moveToFirst() && cursor.getCount() > 0) {
+            ultimoID = cursor.getInt(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry._ID));
+        }
+        db.close();
+        System.out.println("El id de la ultima fila de la tabla detalles es " + ultimoID);
+        return ultimoID;
+    }
+
+
+
+    public void leerRegistrosDetalle (Context context){
+        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+
+        // Obtiene la base de datos en modo lectura
+        SQLiteDatabase db = DatabaseHelper.getReadableDatabase();
+
+        // Define cuales columnas quiere solicitar // en este caso todas las de la clase
+        String[] projection = {
+                DatabaseContract.DataBaseEntry._ID,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_PRODUCTO
+        };
+
+        // Resultados en el cursor
+        Cursor cursor = db.query(
+                DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA, // tabla
+                projection, // columnas
+                null, // where
+                null, // valores del where
+                null, // agrupamiento
+                null, // filtros por grupo
+                null // orden
+        );
+
+        // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
+        if(cursor.moveToFirst()) {
+            do {
+                System.out.println("Detalle { " + cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry._ID)) + "\t" + cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA)) + "\t" + cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_PRODUCTO)) + " }");
+            } while (cursor.moveToNext());
         }
         db.close();
     }
+
 
 
     /**

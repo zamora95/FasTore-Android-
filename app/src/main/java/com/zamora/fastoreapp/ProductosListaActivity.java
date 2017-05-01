@@ -48,9 +48,9 @@ public class ProductosListaActivity extends AppCompatActivity {
         listaCompras = new ListaCompras();
         listaCompras.leer(this, idLista);
         String nombre = listaCompras.getNombre();
-        System.out.println("Nombre de la lista:" + nombre);
+        //System.out.println("Nombre de la lista:" + nombre);
 
-        System.out.println("Productos de la lista " + idLista);
+        //System.out.println("Productos de la lista " + idLista);
 
         productos = listaCompras.getDetalle();
         cargarListas();
@@ -58,9 +58,9 @@ public class ProductosListaActivity extends AppCompatActivity {
     }
 
     public void cargarListas(){
-        for (int i = 0; i < productos.size(); i++) {
+        /*for (int i = 0; i < productos.size(); i++) {
             System.out.println(productos.get(i).toString());
-        }
+        }*/
 
         ListView lv = (ListView) findViewById(R.id.productList);
         adapter = new AdapterProductosCompra(this, productos);
@@ -103,14 +103,6 @@ public class ProductosListaActivity extends AppCompatActivity {
                 intento.putExtra("idLista", idLista);
                 intento.putExtra("usuario", usuario);
                 startActivity(intento);*/
-                Producto nuevoProducto = new Producto();
-                nuevoProducto.setNombre("Bolsa de frijoles");
-                //long numero = nuevoProducto.insertar(getApplicationContext());
-                nuevoProducto.insertar(getApplicationContext());
-                //System.out.println("El id del nuevo registro es: " + numero);
-                //nuevoProducto.leerUltimoProducto(getApplicationContext());
-                nuevoProducto.insertarDetalle(getApplicationContext(), idLista);
-                onRestart();
 
                 return true;
 
@@ -137,7 +129,7 @@ public class ProductosListaActivity extends AppCompatActivity {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
             Toast.makeText(getApplicationContext(),
-                    "Disculpa, tu dispositivo no soporta esta función",
+                    "Lo sentimos, tu dispositivo no soporta esta función",
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -179,9 +171,9 @@ public class ProductosListaActivity extends AppCompatActivity {
                                 Producto nuevoProducto = new Producto();
                                 nuevoProducto.setNombre(capText);
                                 nuevoProducto.insertar(getApplicationContext());
-                                nuevoProducto.leerUltimoProducto(getApplicationContext());
                                 nuevoProducto.insertarDetalle(getApplicationContext(), idLista);
-                                dialog.cancel();
+                                //new Producto().leerRegistrosDetalle(this);
+                                onRestart();
                             }
                         })
                 .setNegativeButton("No",
