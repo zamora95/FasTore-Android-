@@ -77,13 +77,35 @@ public class Producto {
 
         // Crear un mapa de valores donde las columnas son las llaves
         ContentValues values = new ContentValues();
-        values.put(DatabaseContract.DataBaseEntry._ID, getId());
+        //values.put(DatabaseContract.DataBaseEntry._ID, getId());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE, getNombre());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO, getPrecio());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN, getImagen());
 
         // Insertar la nueva fila
-        return db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, null, values);
+        long idRetorno = db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, null, values);
+        System.out.println("El id de retorno de " + getNombre() + " es " + idRetorno);
+        setId(String.valueOf(idRetorno));
+        return idRetorno;
+    }
+
+
+    public long insertarDetalle(Context context, String idLista) {
+        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = DatabaseHelper.getWritableDatabase();
+
+        // Crear un mapa de valores donde las columnas son las llaves
+        ContentValues values = new ContentValues();
+        System.out.println("Insertando en detalle");
+        System.out.println("El id de la de la lista es " + idLista);
+        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA, idLista);
+        System.out.println("El id del producto es " + getId());
+        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_PRODUCTO, getId());
+
+        // Insertar la nueva fila
+        long idRetorno = db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA, null, values);
+        System.out.println("El id de retorno es " + idRetorno);
+        return idRetorno;
     }
 
 
@@ -131,6 +153,55 @@ public class Producto {
             setImagen(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN)));
         }
+    }
+
+
+    /**
+     * Leer el último registro de la tabla producto
+     */
+    public void leerUltimoProducto (Context context){
+        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+
+        // Obtiene la base de datos en modo lectura
+        SQLiteDatabase db = DatabaseHelper.getReadableDatabase();
+
+        // Define cuales columnas quiere solicitar // en este caso todas las de la clase
+        String[] projection = {
+                DatabaseContract.DataBaseEntry._ID,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO,
+                DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN,
+        };
+
+        // Orden
+        String orderBy = DatabaseContract.DataBaseEntry._ID + " ASC";
+        // Límite 1
+        String limit = "1";
+
+        // Resultados en el cursor
+        Cursor cursor = db.query(
+                DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, // tabla
+                projection, // columnas
+                null, // where
+                null, // valores del where
+                null, // agrupamiento
+                null, // filtros por grupo
+                orderBy, // orden
+                limit
+        );
+
+        // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
+        if(cursor.moveToFirst() && cursor.getCount() > 0) {
+            setId(cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry._ID)));
+            setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
+            setPrecio(cursor.getDouble(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry.COLUMN_NAME_PRECIO)));
+            setImagen(cursor.getString(cursor.getColumnIndexOrThrow(
+                    DatabaseContract.DataBaseEntry.COLUMN_NAME_IMAGEN)));
+        }
+        db.close();
     }
 
 

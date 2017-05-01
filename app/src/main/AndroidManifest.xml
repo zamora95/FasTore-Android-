@@ -21,10 +21,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NuevaListaActivity" android:windowSoftInputMode="stateVisible">
-
-        </activity>
-
         <activity android:name=".ProductosListaActivity">
 
         </activity>
