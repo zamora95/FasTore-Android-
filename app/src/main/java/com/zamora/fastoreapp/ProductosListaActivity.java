@@ -22,6 +22,7 @@ import com.zamora.fastoreapp.Clases.Producto;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static android.R.attr.id;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static android.os.Build.VERSION_CODES.M;
 import static com.zamora.fastoreapp.ListasCompraActivity.arregloListasCompra;
@@ -63,7 +64,7 @@ public class ProductosListaActivity extends AppCompatActivity {
         }*/
 
         ListView lv = (ListView) findViewById(R.id.productList);
-        adapter = new AdapterProductosCompra(this, productos);
+        adapter = new AdapterProductosCompra(this, listaCompras.getDetalle());
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -94,16 +95,10 @@ public class ProductosListaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemAdd:
-                /*
-                Intent intento = new Intent(getApplicationContext(), NuevoProductoActivity.class);
-                intento.putParcelableArrayListExtra("listaProductos", (ArrayList<? extends Parcelable>) arregloListaProductosCompra);
-                startActivity(intento);*/
-
-                /*Intent intento = new Intent(getApplicationContext(), NuevoProductoActivity.class);
-                intento.putExtra("idLista", idLista);
-                intento.putExtra("usuario", usuario);
-                startActivity(intento);*/
-
+                NuevoProductoDialog npd = new NuevoProductoDialog(ProductosListaActivity.this, listaCompras);
+                npd.show();
+                //onRestart();
+                adapter.notifyDataSetChanged();
                 return true;
 
             case R.id.itemAddByVoice:
@@ -170,8 +165,18 @@ public class ProductosListaActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Producto nuevoProducto = new Producto();
                                 nuevoProducto.setNombre(capText);
-                                nuevoProducto.insertar(getApplicationContext());
-                                nuevoProducto.insertarDetalle(getApplicationContext(), idLista);
+                                long idRetorno = nuevoProducto.insertar(getApplicationContext());
+                                if (idRetorno != -1) {
+                                    Toast.makeText(getApplicationContext(), "Se insertó " + nuevoProducto.toString(), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error al insertar el producto", Toast.LENGTH_SHORT).show();
+                                }
+                                idRetorno = nuevoProducto.insertarDetalle(getApplicationContext(), idLista);
+                                if (idRetorno != -1) {
+                                    Toast.makeText(getApplicationContext(), "Se insertó el detalle relacionado", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error al insertar el detalle", Toast.LENGTH_SHORT).show();
+                                }
                                 //new Producto().leerRegistrosDetalle(this);
                                 onRestart();
                             }

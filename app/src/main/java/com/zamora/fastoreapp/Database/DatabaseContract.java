@@ -89,7 +89,7 @@ public class DatabaseContract {
 
     public static final String SQL_CREATE_PRODUCTO =
             "CREATE TABLE " + DataBaseEntry.TABLE_NAME_PRODUCTO + " (" +
-                    DataBaseEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
+                    DataBaseEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     DataBaseEntry.COLUMN_NAME_NOMBRE + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_PRECIO + REAL_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_IMAGEN + TEXT_TYPE + " )";
@@ -101,9 +101,9 @@ public class DatabaseContract {
 
     public static final String SQL_CREATE_DETALLE_LISTA =
             "CREATE TABLE " + DataBaseEntry.TABLE_NAME_DETALLE_LISTA + " (" +
-                    DataBaseEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
+                    DataBaseEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     DataBaseEntry.COLUMN_NAME_ID_LISTA + TEXT_TYPE + COMMA_SEP +
-                    DataBaseEntry.COLUMN_NAME_ID_PRODUCTO + TEXT_TYPE + COMMA_SEP +
+                    DataBaseEntry.COLUMN_NAME_ID_PRODUCTO + INTEGER_TYPE + COMMA_SEP +
                     " FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_LISTA +
                     ") REFERENCES " + DataBaseEntry.TABLE_NAME_LISTA_COMPRA + "(" + DataBaseEntry._ID + ")" + COMMA_SEP +
                     " FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_PRODUCTO +
@@ -116,7 +116,7 @@ public class DatabaseContract {
 
     public static final String SQL_CREATE_LISTAS_COMPARTIDAS =
             "CREATE TABLE " + DataBaseEntry.TABLE_NAME_LISTAS_COMPARTIDAS + " (" +
-                    DataBaseEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
+                    DataBaseEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     DataBaseEntry.COLUMN_NAME_ID_LISTA + TEXT_TYPE + COMMA_SEP +
                     DataBaseEntry.COLUMN_NAME_ID_USUARIO + TEXT_TYPE + COMMA_SEP +
                     " FOREIGN KEY (" + DataBaseEntry.COLUMN_NAME_ID_LISTA +

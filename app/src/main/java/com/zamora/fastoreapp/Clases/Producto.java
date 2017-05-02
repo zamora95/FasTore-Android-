@@ -13,25 +13,25 @@ import com.zamora.fastoreapp.Database.DatabaseHelper;
  */
 
 public class Producto {
-    private String id;
+    private int id;
     private String nombre;
     private Double precio;
     private String imagen;
 
     public Producto(){}
 
-    public Producto(String id, String nombre, Double precio, String imagen) {
+    public Producto(int id, String nombre, Double precio, String imagen) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.imagen = imagen;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -75,7 +75,7 @@ public class Producto {
         DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = DatabaseHelper.getWritableDatabase();
 
-        setId(String.valueOf(leerUltimoProducto(context) + 1));
+        setId(leerUltimoProducto(context) + 1);
         // Crear un mapa de valores donde las columnas son las llaves
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.DataBaseEntry._ID, getId());
@@ -85,8 +85,7 @@ public class Producto {
         System.out.println("Se va a insertar el " + toString());
 
         // Insertar la nueva fila
-        long idRetorno = db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, null, values);
-        return idRetorno;
+        return db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, null, values);
     }
 
 
@@ -99,7 +98,7 @@ public class Producto {
         System.out.println("Insertando en detalle");
         int id = leerUltimoDetalle(context) + 1;
         System.out.println("El id del detalle es " + id);
-        values.put(DatabaseContract.DataBaseEntry._ID, String.valueOf(id));
+        values.put(DatabaseContract.DataBaseEntry._ID, id);
         System.out.println("El id de la de la lista es " + idLista);
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA, idLista);
         System.out.println("El id del producto es " + getId());
@@ -109,6 +108,7 @@ public class Producto {
         long idRetorno = db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_DETALLE_LISTA, null, values);
         System.out.println("El id de retorno es " + idRetorno);
         return idRetorno;
+
     }
 
 
@@ -146,7 +146,7 @@ public class Producto {
 
         // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
         if(cursor.moveToFirst() && cursor.getCount() > 0) {
-            setId(cursor.getString(cursor.getColumnIndexOrThrow(
+            setId(cursor.getInt(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry._ID)));
             setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
@@ -270,9 +270,9 @@ public class Producto {
         // recorrer los resultados y asignarlos a la clase // aca podria implementarse un ciclo si es necesario
         if(cursor.moveToFirst()) {
             do {
-                System.out.println("Detalle { " + cursor.getString(cursor.getColumnIndexOrThrow(
+                System.out.println("Detalle { " + cursor.getInt(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry._ID)) + "\t" + cursor.getString(cursor.getColumnIndexOrThrow(
-                        DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA)) + "\t" + cursor.getString(cursor.getColumnIndexOrThrow(
+                        DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_LISTA)) + "\t" + cursor.getInt(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_ID_PRODUCTO)) + " }");
             } while (cursor.moveToNext());
         }
@@ -296,7 +296,7 @@ public class Producto {
         // Criterio de actualizacion
         String selection = DatabaseContract.DataBaseEntry._ID + " LIKE ?";
         // Se detallan los argumentos
-        String[] selectionArgs = { getId() };
+        String[] selectionArgs = { String.valueOf(getId()) };
         // Actualizar la base de datos
         return db.update(DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, values, selection, selectionArgs);
     }

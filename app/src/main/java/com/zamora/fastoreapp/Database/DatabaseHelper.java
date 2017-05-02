@@ -39,9 +39,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.execSQL("insert into listas_compra (" + DatabaseContract.DataBaseEntry._ID + ",nombre,id_usuario,fecha_compra,monto_total) values('1','Lista 1','10','2017-04-01',25.08)");
         db.execSQL("insert into listas_compra (" + DatabaseContract.DataBaseEntry._ID + ",nombre,id_usuario,fecha_compra,monto_total) values('2','Lista 2','10','2017-04-01',33.51)");
         db.execSQL("insert into listas_compra (" + DatabaseContract.DataBaseEntry._ID + ",nombre,id_usuario,fecha_compra,monto_total) values('3','Lista 3','11','2017-04-01',33.51)");
-        db.execSQL("insert into productos (" + DatabaseContract.DataBaseEntry._ID + ",nombre,precio) values('1','Arroz',1500.00)");
-        db.execSQL("insert into detalles_lista (" + DatabaseContract.DataBaseEntry._ID + ",id_lista, id_producto) values('1','2','1')");
-        db.execSQL("insert into detalles_lista (" + DatabaseContract.DataBaseEntry._ID + ",id_lista, id_producto) values('2','00100003','1')");
+        db.execSQL("insert into productos (" + DatabaseContract.DataBaseEntry._ID + ",nombre,precio) values(1,'Arroz',1500.00)");
+        db.execSQL("insert into detalles_lista (" + DatabaseContract.DataBaseEntry._ID + ",id_lista, id_producto) values(1,'2',1)");
+        //db.execSQL("insert into detalles_lista (" + DatabaseContract.DataBaseEntry._ID + ",id_lista, id_producto) values('2','00100003','1')");
 
 
     }

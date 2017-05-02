@@ -214,7 +214,7 @@ public class ListaCompras {
         if(cursor.moveToFirst()) {
             do {
                 Producto miProducto = new Producto();
-                miProducto.setId(cursor.getString(cursor.getColumnIndexOrThrow(
+                miProducto.setId(cursor.getInt(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry._ID)));
                 miProducto.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
                         DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
