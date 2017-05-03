@@ -35,48 +35,26 @@ public class ListasCompraActivity extends AppCompatActivity{
     private AdapterListasComprasUsuario adapter;
     private int listaSeleccionada;
     public static String fechaSeleccionada;
-    private LinearLayout ProfSection;
-    private Button SingOut;
-    private TextView Name,Email;
-    private ImageView ProfPic;
 
     public ArrayList<ListaCompras> getListas() {
         return usuario.getListasCompras();
     }
+    String nombre;
+    String email;
+    String imagen;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_compras);
-        ProfSection = (LinearLayout) findViewById(R.id.profSection);
-        SingOut = (Button) findViewById(R.id.btnLogOut);
-        Name = (TextView) findViewById(R.id.name);
-        Email = (TextView) findViewById(R.id.email);
-        ProfPic = (ImageView) findViewById(R.id.profPic);
-        /*String nombre = getIntent().getExtras().getString("nombre");
-        String email = getIntent().getExtras().getString("email");
-        String imagen = getIntent().getExtras().getString("image");
-        Name.setText(nombre);
-        Email.setText(email);
-        if(imagen != "") {
-            Glide.with(this).load(imagen).into(ProfPic);
-        } else {
-            ProfPic.setImageResource(R.drawable.photo);
-        }*/
+         nombre = getIntent().getExtras().getString("nombre");
+         email = getIntent().getExtras().getString("email");
+         imagen = getIntent().getExtras().getString("image");
         getSupportActionBar().setTitle("Mis listas de compra");
         //idUsuario = getIntent().getExtras().getString("idUsuario");
         idUsuario = "10";
-
         leerUsuario(idUsuario);
         cargarListas();
-        SingOut.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                MainActivity main = new MainActivity();
-                main.singOut();
-            }
-        });
     }
 
     
@@ -150,7 +128,10 @@ public class ListasCompraActivity extends AppCompatActivity{
 
                 NuevaListaDialog nla = new NuevaListaDialog(ListasCompraActivity.this, idUsuario, arregloListasCompra.size()+1);
                 nla.show();
-
+                return true;
+            case R.id.itemProfile:
+                DialogProfile dpf = new DialogProfile(ListasCompraActivity.this,nombre,email,imagen);
+                dpf.show();
                 return true;
 
 
