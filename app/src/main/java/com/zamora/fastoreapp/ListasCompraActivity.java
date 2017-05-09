@@ -18,9 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.zamora.fastoreapp.Adapters.AdapterListasComprasUsuario;
 import com.zamora.fastoreapp.Clases.ListaCompras;
 import com.zamora.fastoreapp.Clases.Usuario;
+import com.zamora.fastoreapp.Firebase.FirebaseReferences;
 
 import java.util.ArrayList;
 
@@ -50,6 +53,11 @@ public class ListasCompraActivity extends AppCompatActivity{
          nombre = getIntent().getExtras().getString("nombre");
          email = getIntent().getExtras().getString("email");
          imagen = getIntent().getExtras().getString("image");
+        String[] user = email.split("@");
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //DatabaseReference myRefPrin = database.getReference(FirebaseReferences.FASTOREAPP_REFERENCES);
+        //String x = myRefPrin.child("Usuarios").getKey();
+        //Toast.makeText(getApplicationContext(),myRefPrin.getKey(),Toast.LENGTH_LONG).show();
         getSupportActionBar().setTitle("Mis listas de compra");
         //idUsuario = getIntent().getExtras().getString("idUsuario");
         idUsuario = "10";
