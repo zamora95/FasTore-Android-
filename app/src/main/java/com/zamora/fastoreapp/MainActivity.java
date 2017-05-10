@@ -68,8 +68,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                signInButton.setVisibility(View.GONE);
-                signOutButton.setVisibility(View.VISIBLE);
+                //signInButton.setVisibility(View.GONE);
+                //signOutButton.setVisibility(View.VISIBLE);
+
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
             }
         });
+
     }
 
     private void signIn() {
@@ -111,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        signInButton.setVisibility(View.VISIBLE);
-                        signOutButton.setVisibility(View.GONE);
+                        //signInButton.setVisibility(View.VISIBLE);
+                        //signOutButton.setVisibility(View.GONE);
                         name  ="";
                         email ="";
                         imgUrl ="";
@@ -179,5 +181,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        signOut();
     }
 }

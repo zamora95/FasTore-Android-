@@ -16,9 +16,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.zamora.fastoreapp.Adapters.AdapterListasComprasUsuario;
 import com.zamora.fastoreapp.Clases.ListaCompras;
 import com.zamora.fastoreapp.Clases.Usuario;
-import com.zamora.fastoreapp.Firebase.FirebaseReferences;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Zamora on 01/04/2017.
@@ -49,8 +50,14 @@ public class ListasCompraActivity extends AppCompatActivity{
          imagen = getIntent().getExtras().getString("image");
         String[] user = email.split("@");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference refUSuarios = database.getReference(FirebaseReferences.USUARIOS_REFERENCES);
-        Toast.makeText(getApplicationContext(),refUSuarios.getKey(), Toast.LENGTH_LONG).show();
+        DatabaseReference refUSuarios = database.getReference("Usuarios");
+        Usuario usuario1 = new Usuario("",nombre,email,user[0]);
+        Map<String, String > lista = new HashMap<String, String>();
+        lista.put("1","true");
+        refUSuarios.child(user[0]).setValue(usuario1);
+        DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+user[0]+"/Listas");
+        refHijoUsuario.child("x").push().setValue(lista);
+        Toast.makeText(getApplicationContext(),user[0], Toast.LENGTH_LONG).show();
         getSupportActionBar().setTitle("Mis listas de compra");
         //idUsuario = getIntent().getExtras().getString("idUsuario");
         idUsuario = "10";
