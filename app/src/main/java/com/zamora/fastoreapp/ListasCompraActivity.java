@@ -2,22 +2,15 @@ package com.zamora.fastoreapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.zamora.fastoreapp.Adapters.AdapterListasComprasUsuario;
@@ -32,6 +25,7 @@ import java.util.ArrayList;
  */
 
 public class ListasCompraActivity extends AppCompatActivity{
+
     public static ArrayList<ListaCompras> arregloListasCompra;
     private static String idUsuario;
     private Usuario usuario;
@@ -54,10 +48,9 @@ public class ListasCompraActivity extends AppCompatActivity{
          email = getIntent().getExtras().getString("email");
          imagen = getIntent().getExtras().getString("image");
         String[] user = email.split("@");
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference myRefPrin = database.getReference(FirebaseReferences.FASTOREAPP_REFERENCES);
-        //String x = myRefPrin.child("Usuarios").getKey();
-        //Toast.makeText(getApplicationContext(),myRefPrin.getKey(),Toast.LENGTH_LONG).show();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refUSuarios = database.getReference(FirebaseReferences.USUARIOS_REFERENCES);
+        Toast.makeText(getApplicationContext(),refUSuarios.getKey(), Toast.LENGTH_LONG).show();
         getSupportActionBar().setTitle("Mis listas de compra");
         //idUsuario = getIntent().getExtras().getString("idUsuario");
         idUsuario = "10";
@@ -71,6 +64,11 @@ public class ListasCompraActivity extends AppCompatActivity{
         this.usuario.leer(getApplicationContext(), identificacion);
     }
 
+    public void destroy(){
+        //finish();
+        startActivity(new Intent(this,MainActivity.class));
+        finish();
+    }
     
     public void cargarListas(){
         arregloListasCompra = usuario.getListasCompras();

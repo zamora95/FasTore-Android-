@@ -4,7 +4,6 @@ package com.zamora.fastoreapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -63,8 +62,9 @@ public class DialogProfile extends Dialog implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnLogOut:
-                MainActivity main = new MainActivity();
-                main.singOut();
+                ListasCompraActivity main = new ListasCompraActivity();
+                main.destroy();
+
             default:
                 break;
         }
