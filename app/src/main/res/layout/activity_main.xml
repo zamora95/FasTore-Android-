@@ -20,36 +20,35 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView"
             android:src="@drawable/logo1"
-            android:layout_margin="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="140dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_centerHorizontal="true" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/singIng"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="visible"
-            tools:visibility="visible">
-        </com.google.android.gms.common.SignInButton>
-        <Button
-            android:id="@+id/sign_out_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            android:text="Bienvenido, Vamos al lio!"/>
     </RelativeLayout>
-
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/singIng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:paddingBottom="80dp"
+        android:layout_margin="10dp"
+        android:textAlignment="center"
+        >
+    </com.google.android.gms.common.SignInButton>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="©Todos los derechos reservados | FasTore 2017"
+        android:text="©FasTore App 2017 | Todos los derechos reservados"
         android:layout_gravity="bottom"
         android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:background="@color/colorPrimary"
         android:textColor="@color/colorText"
+        android:textAlignment="center"
 
         />
 </FrameLayout>
