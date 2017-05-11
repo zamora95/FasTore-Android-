@@ -17,28 +17,21 @@ import java.util.ArrayList;
  */
 
 public class Usuario {
-    private String apellido;
     private String nombre;
     private String email;
     private String id;
     private ArrayList<ListaCompras> listasCompras;
 
     public Usuario() {
-        this.apellido = null;
         this.nombre = null;
         this.email = null;
         this.id = null;
     }
 
     public Usuario(String apellido, String nombre, String email, String id) {
-        this.apellido = apellido;
         this.nombre = nombre;
         this.email = email;
         this.id = id;
-    }
-
-    public String getApellido() {
-        return apellido;
     }
 
     public String getNombre() {
@@ -51,10 +44,6 @@ public class Usuario {
 
     public String getId() {
         return id;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
     }
 
     public void setNombre(String nombre) {
@@ -87,7 +76,6 @@ public class Usuario {
         // Crear un mapa de valores donde las columnas son las llaves
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.DataBaseEntry._ID, getId());
-        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_APELLIDO, getApellido());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE, getNombre());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_EMAIL, getEmail());
 
@@ -133,8 +121,6 @@ public class Usuario {
         if(cursor.moveToFirst() && cursor.getCount() > 0) {
             this.setId(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry._ID)));
-            this.setApellido(cursor.getString(cursor.getColumnIndexOrThrow(
-                    DatabaseContract.DataBaseEntry.COLUMN_NAME_APELLIDO)));
             this.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE)));
             this.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(
@@ -208,7 +194,6 @@ public class Usuario {
         SQLiteDatabase db = DatabaseHelper.getReadableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_APELLIDO, getApellido());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_NOMBRE, getNombre());
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_EMAIL, getEmail());
 

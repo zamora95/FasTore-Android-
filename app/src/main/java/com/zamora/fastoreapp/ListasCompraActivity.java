@@ -34,30 +34,29 @@ public class ListasCompraActivity extends AppCompatActivity{
     private int listaSeleccionada;
     public static String fechaSeleccionada;
 
-    public ArrayList<ListaCompras> getListas() {
-        return usuario.getListasCompras();
-    }
     String nombre;
     String email;
     String imagen;
+    String nombreUsuario = "fevig1994";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_compras);
-         nombre = getIntent().getExtras().getString("nombre");
-         email = getIntent().getExtras().getString("email");
-         imagen = getIntent().getExtras().getString("image");
-        String[] user = email.split("@");
+        //nombre = getIntent().getExtras().getString("nombre");
+        //email = getIntent().getExtras().getString("email");
+        //imagen = getIntent().getExtras().getString("image");
+        //String[] user = email.split("@");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refUSuarios = database.getReference("Usuarios");
-        Usuario usuario1 = new Usuario("",nombre,email,user[0]);
+        Usuario usuario1 = new Usuario("",nombre,email,nombreUsuario);
         Map<String, String > lista = new HashMap<String, String>();
         lista.put("1","true");
-        refUSuarios.child(user[0]).setValue(usuario1);
-        DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+user[0]+"/Listas");
+        refUSuarios.child(nombreUsuario).setValue(usuario1);
+        DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+nombreUsuario+"/Listas");
         refHijoUsuario.child("x").push().setValue(lista);
-        Toast.makeText(getApplicationContext(),user[0], Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),nombre, Toast.LENGTH_LONG).show();
         getSupportActionBar().setTitle("Mis listas de compra");
         //idUsuario = getIntent().getExtras().getString("idUsuario");
         idUsuario = "10";
