@@ -124,9 +124,7 @@ public class NuevaListaDialog extends Dialog implements View.OnClickListener{
                 nuevaLista.setIdUsuario(ListasCompraActivity.user[0]);
                 nuevaLista.setFechaCompra(txtFecha.getText().toString());
 
-                DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+ListasCompraActivity.user[0]);
-                refHijoUsuario.child("lista").push().setValue(nuevaLista);
-                //nuevaLista.insertar(context);
+                nuevaLista.insertar(nuevaLista);
                 Intent intent = new Intent(context, ProductosListaActivity.class);
                 intent.putExtra("idLista", nuevaLista.getId());
                 this.dismiss();

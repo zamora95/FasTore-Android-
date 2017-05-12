@@ -6,8 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.zamora.fastoreapp.Database.DatabaseContract;
 import com.zamora.fastoreapp.Database.DatabaseHelper;
+import com.zamora.fastoreapp.ListasCompraActivity;
 
 import java.util.ArrayList;
 
@@ -16,6 +19,10 @@ import java.util.ArrayList;
  */
 
 public class ListaCompras {
+
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference refUSuarios = database.getReference("Usuarios");
+
     private String id;
     private String nombre;
     private String idUsuario;
@@ -109,8 +116,10 @@ public class ListaCompras {
     /**
      * Función que inserta una lista de compras en la base de datos
      */
-    public long insertar(Context context) {
-        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+    public void insertar(ListaCompras context) {
+        DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+ ListasCompraActivity.user[0]);
+        refHijoUsuario.child("lista").push().setValue(context);
+        /*DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = DatabaseHelper.getWritableDatabase();
 
         // Crear un mapa de valores donde las columnas son las llaves
@@ -122,7 +131,7 @@ public class ListaCompras {
         values.put(DatabaseContract.DataBaseEntry.COLUMN_NAME_MONTO_TOTAL, getMontoTotal());
 
         // Insertar la nueva fila
-        return db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_LISTA_COMPRA, null, values);
+        return db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_LISTA_COMPRA, null, values);*/
     }
 
 

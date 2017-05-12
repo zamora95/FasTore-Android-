@@ -22,11 +22,6 @@ import com.zamora.fastoreapp.Clases.Producto;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static android.R.attr.id;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-import static android.os.Build.VERSION_CODES.M;
-import static com.zamora.fastoreapp.ListasCompraActivity.arregloListasCompra;
-
 /**
  * Created by Sergio on 13/04/2017.
  */
@@ -165,8 +160,8 @@ public class ProductosListaActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Producto nuevoProducto = new Producto();
                                 nuevoProducto.setNombre(capText);
-                                long idRetorno = nuevoProducto.insertar(getApplicationContext());
-                                if (idRetorno != -1) {
+                                nuevoProducto.insertar(nuevoProducto);
+                                /*if (idRetorno != -1) {
                                     Toast.makeText(getApplicationContext(), "Se insertó " + nuevoProducto.toString(), Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Error al insertar el producto", Toast.LENGTH_SHORT).show();
@@ -177,7 +172,7 @@ public class ProductosListaActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Error al insertar el detalle", Toast.LENGTH_SHORT).show();
                                 }
-                                //new Producto().leerRegistrosDetalle(this);
+                                //new Producto().leerRegistrosDetalle(this);*/
                                 onRestart();
                             }
                         })

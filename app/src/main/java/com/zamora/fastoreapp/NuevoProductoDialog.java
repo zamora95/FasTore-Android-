@@ -7,13 +7,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.zamora.fastoreapp.Clases.ListaCompras;
 import com.zamora.fastoreapp.Clases.Producto;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Zamora on 01/05/2017.
@@ -24,6 +22,7 @@ public class NuevoProductoDialog extends Dialog implements View.OnClickListener{
     private EditText txtNombre, txtPrecio;
     private Button btnAgregar;
     public Context context;
+
 
     public NuevoProductoDialog(Context context, ListaCompras listaCompras) {
         super(context);
@@ -56,8 +55,10 @@ public class NuevoProductoDialog extends Dialog implements View.OnClickListener{
                 if (!txtPrecio.getText().toString().equals("")) {
                     nuevoProducto.setPrecio(Double.parseDouble(txtPrecio.getText().toString()));
                 }
-                long idRetorno = nuevoProducto.insertar(context);
-                if (idRetorno != -1) {
+                //DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+ListasCompraActivity.user[0]);
+                //refProducto.push().setValue(nuevoProducto);
+                nuevoProducto.insertar(nuevoProducto);
+                /*if (idRetorno != -1) {
                     Toast.makeText(context, "Se insertó " + nuevoProducto.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "Error al insertar el producto", Toast.LENGTH_SHORT).show();
@@ -67,7 +68,7 @@ public class NuevoProductoDialog extends Dialog implements View.OnClickListener{
                     Toast.makeText(context, "Se insertó el detalle relacionado", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "Error al insertar el detalle", Toast.LENGTH_SHORT).show();
-                }
+                }*/
                 ArrayList<Producto> listaProductos = listaCompras.getDetalle();
                 listaProductos.add(nuevoProducto);
                 listaCompras.setDetalle(listaProductos);

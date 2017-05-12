@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.zamora.fastoreapp.Database.DatabaseContract;
 import com.zamora.fastoreapp.Database.DatabaseHelper;
 
@@ -13,6 +15,10 @@ import com.zamora.fastoreapp.Database.DatabaseHelper;
  */
 
 public class Producto {
+
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference refProducto = database.getReference("Producto");
+
     private int id;
     private String nombre;
     private Double precio;
@@ -71,8 +77,10 @@ public class Producto {
     /**
      * Función que inserta un producto en la base de datos
      */
-    public long insertar(Context context) {
-        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+    public void insertar(Producto context) {
+        //Producto nuevoProducto = new Producto(getId(),getNombre(),getPrecio(),"");
+        refProducto.push().setValue(context);
+        /*DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = DatabaseHelper.getWritableDatabase();
 
         setId(leerUltimoProducto(context) + 1);
@@ -85,7 +93,7 @@ public class Producto {
         System.out.println("Se va a insertar el " + toString());
 
         // Insertar la nueva fila
-        return db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, null, values);
+        return db.insert(DatabaseContract.DataBaseEntry.TABLE_NAME_PRODUCTO, null, values);*/
     }
 
 
