@@ -1,22 +1,20 @@
 package com.zamora.fastoreapp;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.zamora.fastoreapp.Clases.ListaCompras;
 
 import java.text.ParseException;
@@ -38,6 +36,8 @@ public class NuevaListaDialog extends Dialog implements View.OnClickListener{
     private Button btnCrearLista;
     private int dd, mm, yyyy, hora, minuto;
     public Context context;
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference refUSuarios = database.getReference("Usuarios");
 
     public NuevaListaDialog(Context context, String idUsuario, int cantListas) {
         super(context);
@@ -121,10 +121,12 @@ public class NuevaListaDialog extends Dialog implements View.OnClickListener{
                 ListaCompras nuevaLista = new ListaCompras();
                 nuevaLista.setId(String.format("%04d%04d", Integer.parseInt(idUsuario), cantListas));
                 nuevaLista.setNombre(txtNombre.getText().toString());
-                nuevaLista.setIdUsuario(idUsuario);
+                nuevaLista.setIdUsuario(ListasCompraActivity.user[0]);
                 nuevaLista.setFechaCompra(txtFecha.getText().toString());
 
-                nuevaLista.insertar(context);
+                DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+ListasCompraActivity.user[0]);
+                refHijoUsuario.child("lista").push().setValue(nuevaLista);
+                //nuevaLista.insertar(context);
                 Intent intent = new Intent(context, ProductosListaActivity.class);
                 intent.putExtra("idLista", nuevaLista.getId());
                 this.dismiss();

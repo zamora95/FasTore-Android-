@@ -9,17 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.zamora.fastoreapp.Adapters.AdapterListasComprasUsuario;
 import com.zamora.fastoreapp.Clases.ListaCompras;
 import com.zamora.fastoreapp.Clases.Usuario;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Zamora on 01/04/2017.
@@ -34,37 +34,55 @@ public class ListasCompraActivity extends AppCompatActivity{
     private int listaSeleccionada;
     public static String fechaSeleccionada;
 
-    String nombre;
-    String email;
-    String imagen;
-    String nombreUsuario = "fevig1994";
+    private String nombre;
+    private String email;
+    private String imagen;
+    public static String[] user;
+    //String nombreUsuario = "fevig1994";
 
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference refUSuarios = database.getReference("Usuarios");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_compras);
-        //nombre = getIntent().getExtras().getString("nombre");
-        //email = getIntent().getExtras().getString("email");
-        //imagen = getIntent().getExtras().getString("image");
-        //String[] user = email.split("@");
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference refUSuarios = database.getReference("Usuarios");
-        Usuario usuario1 = new Usuario("",nombre,email,nombreUsuario);
-        Map<String, String > lista = new HashMap<String, String>();
-        lista.put("1","true");
-        refUSuarios.child(nombreUsuario).setValue(usuario1);
-        DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+nombreUsuario+"/Listas");
-        refHijoUsuario.child("x").push().setValue(lista);
-        Toast.makeText(getApplicationContext(),nombre, Toast.LENGTH_LONG).show();
+        nombre = getIntent().getExtras().getString("nombre");
+        email = getIntent().getExtras().getString("email");
+        imagen = getIntent().getExtras().getString("image");
+        user = email.split("@");
         getSupportActionBar().setTitle("Mis listas de compra");
+        getSupportActionBar().setSubtitle("Welcome");
+       //getSupportActionBar().setHomeButtonEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //idUsuario = getIntent().getExtras().getString("idUsuario");
         idUsuario = "10";
         leerUsuario(idUsuario);
         cargarListas();
     }
 
-    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        refUSuarios.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot us = dataSnapshot.child(user[0]);
+                boolean x = us.exists();
+                if(x == false){
+                    Usuario usuario1 = new Usuario(nombre,email,user[0]);
+                    refUSuarios.child(user[0]).push().setValue(usuario1);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void leerUsuario(String identificacion) {
         this.usuario = new Usuario();
         this.usuario.leer(getApplicationContext(), identificacion);

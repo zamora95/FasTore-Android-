@@ -27,7 +27,7 @@ public class Usuario {
         this.id = null;
     }
 
-    public Usuario(String apellido, String nombre, String email, String id) {
+    public Usuario(String nombre, String email, String id) {
         this.nombre = nombre;
         this.email = email;
         this.id = id;
