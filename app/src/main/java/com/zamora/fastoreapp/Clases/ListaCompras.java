@@ -6,13 +6,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.zamora.fastoreapp.Database.DatabaseContract;
 import com.zamora.fastoreapp.Database.DatabaseHelper;
-import com.zamora.fastoreapp.ListasCompraActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.zamora.fastoreapp.ListasCompraActivity.user;
 
 /**
  * Created by Zamora on 29/03/2017.
@@ -116,9 +122,28 @@ public class ListaCompras {
     /**
      * Función que inserta una lista de compras en la base de datos
      */
-    public void insertar(ListaCompras context) {
-        DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+ ListasCompraActivity.user[0]);
-        refHijoUsuario.child("lista").push().setValue(context);
+    public void insertar(final ListaCompras lista) {
+        final DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+ user[0]+"/Listas");
+        refHijoUsuario.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot us = dataSnapshot.child(lista.getNombre());
+                boolean x = us.exists();
+                if(x == false){
+                    Map<String,Object> hijoLista = new HashMap<String,Object>();
+                    hijoLista.put(lista.getNombre(),lista);
+                    refHijoUsuario.updateChildren(hijoLista);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         /*DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = DatabaseHelper.getWritableDatabase();
 
@@ -189,8 +214,8 @@ public class ListaCompras {
     /**
      * Leer los productos grabados en cada lista del usuario
      */
-    public ArrayList<Producto> leerProductosCompra (Context context, String listaID){
-        DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
+    public ArrayList<Producto> leerProductosCompra (Context context, final String listaID){
+        final DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
         //Create new querybuilder
         SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
 
@@ -219,8 +244,23 @@ public class ListaCompras {
         //Get cursor
         Cursor cursor = _QB.query(db, projection, selection, selectionArgs, null, null, null);
 
-        ArrayList<Producto> misProductos = new ArrayList<>();
-        if(cursor.moveToFirst()) {
+        final ArrayList<Producto> misProductos = new ArrayList<>();
+        final DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+ user[0]+"/Listas/"+listaID+"/Detalle");
+        refHijoUsuario.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Producto producto = snapshot.getValue(Producto.class);
+                    misProductos.add(producto);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        /*if(cursor.moveToFirst()) {
             do {
                 Producto miProducto = new Producto();
                 miProducto.setId(cursor.getInt(cursor.getColumnIndexOrThrow(
@@ -234,7 +274,7 @@ public class ListaCompras {
                 misProductos.add(miProducto);
             } while (cursor.moveToNext());
         }
-        db.close();
+        db.close();*/
         return misProductos;
     }
 

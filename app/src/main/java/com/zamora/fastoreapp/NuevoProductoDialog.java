@@ -11,23 +11,23 @@ import android.widget.EditText;
 import com.zamora.fastoreapp.Clases.ListaCompras;
 import com.zamora.fastoreapp.Clases.Producto;
 
-import java.util.ArrayList;
-
 /**
  * Created by Zamora on 01/05/2017.
  */
 
 public class NuevoProductoDialog extends Dialog implements View.OnClickListener{
     private ListaCompras listaCompras;
+    private String nombreLista;
     private EditText txtNombre, txtPrecio;
     private Button btnAgregar;
     public Context context;
 
 
-    public NuevoProductoDialog(Context context, ListaCompras listaCompras) {
+    public NuevoProductoDialog(Context context, ListaCompras listaCompras,String nombreLista) {
         super(context);
         this.context = context;
         this.listaCompras = listaCompras;
+        this.nombreLista = nombreLista;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class NuevoProductoDialog extends Dialog implements View.OnClickListener{
                 }
                 //DatabaseReference refHijoUsuario = database.getReference("Usuarios"+"/"+ListasCompraActivity.user[0]);
                 //refProducto.push().setValue(nuevoProducto);
-                nuevoProducto.insertar(nuevoProducto);
+                nuevoProducto.insertar(nuevoProducto,nombreLista);
                 /*if (idRetorno != -1) {
                     Toast.makeText(context, "Se insertó " + nuevoProducto.toString(), Toast.LENGTH_SHORT).show();
                 } else {
@@ -69,9 +69,9 @@ public class NuevoProductoDialog extends Dialog implements View.OnClickListener{
                 } else {
                     Toast.makeText(context, "Error al insertar el detalle", Toast.LENGTH_SHORT).show();
                 }*/
-                ArrayList<Producto> listaProductos = listaCompras.getDetalle();
+                /*ArrayList<Producto> listaProductos = listaCompras.getDetalle();
                 listaProductos.add(nuevoProducto);
-                listaCompras.setDetalle(listaProductos);
+                listaCompras.setDetalle(listaProductos);*/
 
                 this.dismiss();
                 break;

@@ -9,6 +9,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.zamora.fastoreapp.Database.DatabaseContract;
 import com.zamora.fastoreapp.Database.DatabaseHelper;
+import com.zamora.fastoreapp.ListasCompraActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Zamora on 30/03/2017.
@@ -17,7 +21,7 @@ import com.zamora.fastoreapp.Database.DatabaseHelper;
 public class Producto {
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference refProducto = database.getReference("Producto");
+
 
     private int id;
     private String nombre;
@@ -77,9 +81,12 @@ public class Producto {
     /**
      * Función que inserta un producto en la base de datos
      */
-    public void insertar(Producto context) {
+    public void insertar(Producto context,String nombreLista) {
         //Producto nuevoProducto = new Producto(getId(),getNombre(),getPrecio(),"");
-        refProducto.push().setValue(context);
+        DatabaseReference refProducto = database.getReference("Usuarios/"+ ListasCompraActivity.user[0]+"/Listas/"+nombreLista+"/Detalle");
+        Map<String,Object> hijoProducto = new HashMap<String, Object>();
+        hijoProducto.put(context.getNombre(),context);
+        refProducto.updateChildren(hijoProducto);
         /*DatabaseHelper DatabaseHelper = new DatabaseHelper(context);
         SQLiteDatabase db = DatabaseHelper.getWritableDatabase();
 

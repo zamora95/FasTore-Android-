@@ -20,6 +20,8 @@ import com.zamora.fastoreapp.Clases.ListaCompras;
 import com.zamora.fastoreapp.Clases.Usuario;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Zamora on 01/04/2017.
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 public class ListasCompraActivity extends AppCompatActivity{
 
     public static ArrayList<ListaCompras> arregloListasCompra;
+    //publi cstatic ArrayList<ListaCompras> arregloListasCompra1;
     private static String idUsuario;
     private Usuario usuario;
     private AdapterListasComprasUsuario adapter;
@@ -71,9 +74,17 @@ public class ListasCompraActivity extends AppCompatActivity{
                 DataSnapshot us = dataSnapshot.child(user[0]);
                 boolean x = us.exists();
                 if(x == false){
-                    Usuario usuario1 = new Usuario(nombre,email,user[0]);
-                    refUSuarios.child(user[0]).push().setValue(usuario1);
+                    Map<String, Object> newUser = new HashMap<String, Object>();
+                    newUser.put("Informacion",new Usuario(nombre,email,user[0]));
+                    refUSuarios.child(user[0]).updateChildren(newUser);
                 }
+                //Toast.makeText(getApplicationContext(),dataSnapshot.getKey(),Toast.LENGTH_LONG).show();
+                //arregloListasCompra.removeAll(arregloListasCompra);
+                /*for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    ListaCompras listaUser = snapshot.getValue(ListaCompras.class);
+                    Toast.makeText(getApplicationContext(),listaUser.getIdUsuario(),Toast.LENGTH_LONG).show();
+                    arregloListasCompra.add(listaUser);
+                }*/
             }
 
             @Override
@@ -83,9 +94,9 @@ public class ListasCompraActivity extends AppCompatActivity{
         });
     }
 
-    public void leerUsuario(String identificacion) {
+    public void leerUsuario(String userId) {
         this.usuario = new Usuario();
-        this.usuario.leer(getApplicationContext(), identificacion);
+        this.usuario.leer(getApplicationContext(), userId);
     }
 
     public void destroy(){
@@ -93,10 +104,10 @@ public class ListasCompraActivity extends AppCompatActivity{
         startActivity(new Intent(this,MainActivity.class));
         finish();
     }
-    
+
     public void cargarListas(){
         arregloListasCompra = usuario.getListasCompras();
-
+        //Toast.makeText(getApplicationContext(),arregloListasCompra.toString(),Toast.LENGTH_LONG).show();
         ListView lv = (ListView) findViewById(R.id.listaCompras);
         adapter = new AdapterListasComprasUsuario(this, arregloListasCompra);
         lv.setAdapter(adapter);
@@ -111,6 +122,7 @@ public class ListasCompraActivity extends AppCompatActivity{
                 ListaCompras selectedList = (ListaCompras) parent.getAdapter().getItem(position);
                 //String idLista = (ListaCompras) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(getApplicationContext(), ProductosListaActivity.class);
+                intent.putExtra("nombreLista",selectedList.getNombre());
                 intent.putExtra("idLista", selectedList.getId());
                 startActivity(intent);
             }

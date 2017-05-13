@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.zamora.fastoreapp.Adapters.AdapterProductosCompra;
 import com.zamora.fastoreapp.Clases.ListaCompras;
 import com.zamora.fastoreapp.Clases.Producto;
@@ -27,8 +28,10 @@ import java.util.Locale;
  */
 
 public class ProductosListaActivity extends AppCompatActivity {
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private AdapterProductosCompra adapter;
     String idLista;
+    String nombreLista;
     ListaCompras listaCompras;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     private ArrayList<Producto> productos;
@@ -40,9 +43,9 @@ public class ProductosListaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         idLista = intent.getStringExtra("idLista");
-
+        nombreLista = intent.getStringExtra("nombreLista");
         listaCompras = new ListaCompras();
-        listaCompras.leer(this, idLista);
+        listaCompras.leer(this, nombreLista);
         String nombre = listaCompras.getNombre();
         //System.out.println("Nombre de la lista:" + nombre);
 
@@ -90,9 +93,10 @@ public class ProductosListaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemAdd:
-                NuevoProductoDialog npd = new NuevoProductoDialog(ProductosListaActivity.this, listaCompras);
+                NuevoProductoDialog npd = new NuevoProductoDialog(ProductosListaActivity.this, listaCompras,nombreLista);
                 npd.show();
                 //onRestart();
+
                 adapter.notifyDataSetChanged();
                 return true;
 
@@ -160,7 +164,8 @@ public class ProductosListaActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Producto nuevoProducto = new Producto();
                                 nuevoProducto.setNombre(capText);
-                                nuevoProducto.insertar(nuevoProducto);
+
+                                nuevoProducto.insertar(nuevoProducto,nombreLista);
                                 /*if (idRetorno != -1) {
                                     Toast.makeText(getApplicationContext(), "Se insertó " + nuevoProducto.toString(), Toast.LENGTH_SHORT).show();
                                 } else {
