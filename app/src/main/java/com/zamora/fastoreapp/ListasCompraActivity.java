@@ -1,7 +1,9 @@
 package com.zamora.fastoreapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +31,7 @@ import java.util.Map;
  */
 
 public class ListasCompraActivity extends AppCompatActivity{
-
+    final public static ArrayList<ListaCompras> misListas = new ArrayList<>();
     public static ArrayList<ListaCompras> arregloListasCompra;
     //publi cstatic ArrayList<ListaCompras> arregloListasCompra1;
     private static String idUsuario;
@@ -60,6 +63,26 @@ public class ListasCompraActivity extends AppCompatActivity{
        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //idUsuario = getIntent().getExtras().getString("idUsuario");
+        final DatabaseReference refLista = database.getReference("Usuarios/"+ user[0]+"/Listas");
+
+        refLista.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                misListas.removeAll(misListas);
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    //if (snapshot.getKey() != "Informacion") {
+
+                    ListaCompras listaUser = snapshot.getValue(ListaCompras.class);
+                    misListas.add(listaUser);
+                    //}
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         idUsuario = "10";
         leerUsuario(idUsuario);
         cargarListas();
@@ -97,6 +120,7 @@ public class ListasCompraActivity extends AppCompatActivity{
     public void leerUsuario(String userId) {
         this.usuario = new Usuario();
         this.usuario.leer(getApplicationContext(), userId);
+        this.usuario.setListasCompras(misListas);
     }
 
     public void destroy(){
@@ -125,6 +149,15 @@ public class ListasCompraActivity extends AppCompatActivity{
                 intent.putExtra("nombreLista",selectedList.getNombre());
                 intent.putExtra("idLista", selectedList.getId());
                 startActivity(intent);
+            }
+        });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ListaCompras selectedList = (ListaCompras) parent.getAdapter().getItem(position);
+                opcionesElemento(selectedList);
+                return false;
             }
         });
     }
@@ -183,5 +216,28 @@ public class ListasCompraActivity extends AppCompatActivity{
     }
 
 
+    /**
+     * Opciones al hacer una pulsación larga en un elemento de la lista
+     */
+    public void opcionesElemento(final ListaCompras selectedList) {
+        final CharSequence[] opciones = {"Ver productos", "Configuración", "Seleccionar", "Eliminar"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Opciones");
+        builder.setItems(opciones, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                if (item == 3) {
+                    Boolean wasRemoved = arregloListasCompra.remove(selectedList);
+                    if (wasRemoved) {
+                        Toast.makeText(getApplicationContext(), "Estoy removiendo del adapter, no de firebase", Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 }

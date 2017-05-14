@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\Freddy\\Documents\\GitHub\\FasTore-Android-\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_productos_lista.xml",
+        "source": "C:\\Users\\Freddy\\Documents\\GitHub\\FasTore-Android-\\app\\src\\main\\res\\menu\\menu_productos_lista.xml"
+    },
+    {
+        "merged": "C:\\Users\\Zamora\\AndroidStudioProjects\\FasTore-Android-\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_productos_lista.xml",
+        "source": "C:\\Users\\Zamora\\AndroidStudioProjects\\FasTore-Android-\\app\\src\\main\\res\\menu\\menu_productos_lista.xml"
+    },
+    {
+        "merged": "C:\\Users\\Freddy\\Documents\\GitHub\\FasTore-Android-\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_search.xml",
+        "source": "C:\\Users\\Freddy\\Documents\\GitHub\\FasTore-Android-\\app\\src\\main\\res\\menu\\menu_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\Zamora\\AndroidStudioProjects\\FasTore-Android-\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_search.xml",
+        "source": "C:\\Users\\Zamora\\AndroidStudioProjects\\FasTore-Android-\\app\\src\\main\\res\\menu\\menu_search.xml"
+    }
+]

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">811516538972-53m04vbala57cts8tp8hna8kr1gk78ah.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://fastoreapp.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">811516538972</string>
+    <string name="google_api_key" translatable="false">AIzaSyB5B83TmtbIjHQJHOerd34iZp9ZgqCN-Ck</string>
+    <string name="google_app_id" translatable="false">1:811516538972:android:105944ed9b8bac93</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB5B83TmtbIjHQJHOerd34iZp9ZgqCN-Ck</string>
+    <string name="google_storage_bucket" translatable="false">fastoreapp.appspot.com</string>
+</resources>

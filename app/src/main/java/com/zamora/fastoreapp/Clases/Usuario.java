@@ -5,17 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.zamora.fastoreapp.Database.DatabaseContract;
 import com.zamora.fastoreapp.Database.DatabaseHelper;
 
 import java.util.ArrayList;
-
-import static com.zamora.fastoreapp.ListasCompraActivity.user;
 
 
 /**
@@ -134,7 +128,7 @@ public class Usuario {
                     DatabaseContract.DataBaseEntry.COLUMN_NAME_EMAIL)));
         }
 
-        this.setListasCompras(leerListasUsuario(context, identificacion));
+        //this.setListasCompras(leerListasUsuario(context, identificacion));
     }
 
 
@@ -172,25 +166,7 @@ public class Usuario {
         );
 
         final ArrayList<ListaCompras> misListas = new ArrayList<>();
-        final DatabaseReference refLista = database.getReference("Usuarios/"+ user[0]+"/Listas");
-        refLista.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    //if (snapshot.getKey() != "Informacion") {
-
-                        ListaCompras listaUser = snapshot.getValue(ListaCompras.class);
-                        misListas.add(listaUser);
-                    //}
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         /*System.out.println(String.valueOf(cursor.getCount()));
         if(cursor.moveToFirst()) {
             do {

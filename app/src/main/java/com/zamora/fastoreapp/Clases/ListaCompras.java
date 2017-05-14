@@ -249,6 +249,7 @@ public class ListaCompras {
         refHijoUsuario.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                misProductos.removeAll(misProductos);
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Producto producto = snapshot.getValue(Producto.class);
                     misProductos.add(producto);
